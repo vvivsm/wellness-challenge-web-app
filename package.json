@@ -1,0 +1,28 @@
+{
+  "name": "bed-ca1-vvivsm-sp",
+  "version": "1.0.0",
+  "description": "You are required to build your folder structures for your project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init_tables": "node src/configs/createSchema.js && node src/configs/initTables.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ST0503-BED/bed-ca1-vvivsm-sp.git"
+  },
+  "author": "Vivian Tan Xiu Li",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ST0503-BED/bed-ca1-vvivsm-sp/issues"
+  },
+  "homepage": "https://github.com/ST0503-BED/bed-ca1-vvivsm-sp#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mysql2": "^3.15.3",
+    "nodemon": "^3.1.11"
+  }
+}
