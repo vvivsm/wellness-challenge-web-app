@@ -39,7 +39,7 @@ module.exports.generateToken = (req, res, next) => {
         }
     };
 
-    const token = jwt.sign(payload, secretKey, options, callback);
+    jwt.sign(payload, secretKey, options, callback);
 };
 //////////////////////////////////////////////////////
 // MIDDLEWARE FUNCTION FOR SENDING JWT TOKEN

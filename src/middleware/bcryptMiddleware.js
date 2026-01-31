@@ -12,7 +12,11 @@ const saltRounds = 10;
 // MIDDLEWARE FUNCTION FOR COMPARING PASSWORD
 //////////////////////////////////////////////////////
 module.exports.comparePassword = (req, res, next) => {
-    // Check password
+
+    if (!req.body.password) {
+        return res.status(400).json({ message: "Password is required" });
+    }
+
     const callback = (err, isMatch) => {
         if (err) {
             console.error("Error bcrypt:", err);
@@ -34,6 +38,10 @@ module.exports.comparePassword = (req, res, next) => {
 // MIDDLEWARE FUNCTION FOR HASHING PASSWORD
 //////////////////////////////////////////////////////
 module.exports.hashPassword = (req, res, next) => {
+    if (!req.body.password) {
+        return res.status(400).json({ message: "Password is required" });
+    }
+
     const callback = (err, hash) => {
         if (err) {
             console.error("Error bcrypt:", err);
