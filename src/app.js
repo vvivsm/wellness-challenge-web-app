@@ -14,12 +14,13 @@ app.use(express.json());
 // eg.: name=John+Doe&email=john%40example.com
 app.use(express.urlencoded(
     // Enables advanced parsing (to nested arrays/objects)
-    { extended: true }
+    { extended: false }
 ));
 
 // Import main router and mount to base path
 const mainRoutes = require('./routes/mainRoutes');
-app.use('/', mainRoutes);
+app.use('/api', mainRoutes);
 
+app.use("/", express.static(`public`))
 // Export app
 module.exports = app;

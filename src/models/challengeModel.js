@@ -56,13 +56,3 @@ module.exports.updateById = (data, callback) => {
     const VALUES = [data.description, data.points, data.type, data.id];
     pool.query(SQLSTATEMENT, VALUES, callback);
 };
-
-module.exports.selectById = (data, callback) => {
-    const SQLSTATEMENT = `
-        SELECT * FROM Wellnesschallenge
-        WHERE id = ?;
-    `;
-
-    const VALUES = [data.id]
-    pool.query(SQLSTATEMENT, VALUES, callback);
-}
