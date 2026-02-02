@@ -7,6 +7,12 @@ const pool = require("../services/db");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
+// Import env
+require('dotenv').config();
+
+//Import parameters from .env
+const pepper = process.env.BCRYPT_PEPPER
+
 const callback = (error, results, fields) => {
   if (error) {
     console.error("Error creating tables:", error);
@@ -16,7 +22,7 @@ const callback = (error, results, fields) => {
   process.exit();
 }
 
-bcrypt.hash('1234', saltRounds, (error, hash) => {
+bcrypt.hash('1234' + pepper, saltRounds, (error, hash) => {
   if (error) {
     console.error("Error hashing password:", error);
   } else {

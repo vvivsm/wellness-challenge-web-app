@@ -3,9 +3,13 @@
 //////////////////////////////////////////////////////
 const bcrypt = require("bcrypt");
 
-//////////////////////////////////////////////////////
+// Import env
+require('dotenv').config();
+
+//Import parameters from .env
+const pepper =  process.env.BCRYPT_PEPPER
+
 // SET SALT ROUNDS
-//////////////////////////////////////////////////////
 const saltRounds = 10;
 
 //////////////////////////////////////////////////////
@@ -31,7 +35,7 @@ module.exports.comparePassword = (req, res, next) => {
             }
         }
     };
-    bcrypt.compare(req.body.password, res.locals.hash, callback);
+    bcrypt.compare(req.body.password + pepper, res.locals.hash, callback);
 };
 
 //////////////////////////////////////////////////////
@@ -52,5 +56,5 @@ module.exports.hashPassword = (req, res, next) => {
         }
     };
 
-    bcrypt.hash(req.body.password, saltRounds, callback);
+    bcrypt.hash(req.body.password + pepper, saltRounds, callback);
 };
