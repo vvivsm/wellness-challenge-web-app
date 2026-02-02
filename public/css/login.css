@@ -1,0 +1,438 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --dirt-brown: #8B4513;
+    --grass-green: #7CBD2B;
+    --dark-grass: #5A9B1F;
+    --stone-gray: #7A7A7A;
+    --dark-stone: #4A4A4A;
+    --wood: #9C6B3C;
+    --gold: #FFAA00;
+    --emerald: #17DD62;
+    --diamond: #5DADE2;
+    --text-white: #FFFFFF;
+    --text-shadow: #3F3F3F;
+    --error-red: #FF5555;
+    --success-green: #55FF55;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 50%, #7CBD2B 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    image-rendering: pixelated;
+}
+
+/* Pixelated clouds animation */
+.clouds {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    height: 150px;
+    pointer-events: none;
+}
+
+.cloud {
+    position: absolute;
+    width: 80px;
+    height: 48px;
+    background: white;
+    box-shadow:
+        0 0 0 8px white,
+        16px 0 0 8px white,
+        32px 0 0 8px white,
+        48px 0 0 8px white,
+        8px -8px 0 8px white,
+        24px -8px 0 8px white,
+        40px -8px 0 8px white,
+        16px -16px 0 8px white,
+        32px -16px 0 8px white;
+    animation: float 60s linear infinite;
+}
+
+.cloud:nth-child(2) {
+    top: 80px;
+    animation-delay: -20s;
+}
+
+.cloud:nth-child(3) {
+    top: 120px;
+    animation-delay: -40s;
+}
+
+@keyframes float {
+    from {
+        left: -200px;
+    }
+
+    to {
+        left: calc(100% + 200px);
+    }
+}
+
+/* Main container */
+.container {
+    position: relative;
+    z-index: 10;
+    animation: slideDown 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100vh) rotate(5deg);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) rotate(0);
+        opacity: 1;
+    }
+}
+
+/* Minecraft-style panel */
+.panel {
+    background: rgba(0, 0, 0, 0.7);
+    border: 4px solid #3F3F3F;
+    box-shadow:
+        inset 0 0 0 2px #000000,
+        inset 0 0 0 4px #5A5A5A,
+        0 8px 0 4px rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    width: 480px;
+    position: relative;
+}
+
+.panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 100%);
+}
+
+/* Logo/Title */
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo h1 {
+    font-size: 20px;
+    color: var(--gold);
+    text-shadow:
+        3px 3px 0 var(--text-shadow),
+        -1px -1px 0 rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.5));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 16px rgba(255, 170, 0, 0.8));
+    }
+}
+
+.logo p {
+    font-size: 8px;
+    color: var(--emerald);
+    text-shadow: 2px 2px 0 var(--text-shadow);
+    margin-top: 15px;
+}
+
+/* Soup bowl icon */
+.soup-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    position: relative;
+    animation: bob 2s ease-in-out infinite;
+}
+
+@keyframes bob {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.bowl {
+    width: 56px;
+    height: 32px;
+    background: #8B4513;
+    border-radius: 0;
+    position: relative;
+    margin: 0 auto;
+    box-shadow:
+        0 0 0 2px #654321,
+        inset 0 -4px 0 2px #654321,
+        inset 0 4px 0 2px #A0522D;
+}
+
+.soup {
+    width: 48px;
+    height: 8px;
+    background: #FFA500;
+    position: absolute;
+    top: 8px;
+    left: 4px;
+    box-shadow:
+        0 0 0 2px #FF8C00,
+        0 2px 0 2px #FF7F00;
+}
+
+.steam {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.steam span {
+    display: block;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.6);
+    margin: 4px auto;
+    animation: steam 2s ease-in-out infinite;
+}
+
+.steam span:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.steam span:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes steam {
+    0% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* Form elements */
+.form-group {
+    margin-bottom: 24px;
+}
+
+label {
+    display: block;
+    font-size: 10px;
+    color: var(--text-white);
+    text-shadow: 2px 2px 0 var(--text-shadow);
+    margin-bottom: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 3px solid var(--stone-gray);
+    color: var(--text-white);
+    outline: none;
+    transition: all 0.2s;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 4px 0 2px rgba(0, 0, 0, 0.3);
+}
+
+input:focus {
+    border-color: var(--diamond);
+    background: rgba(93, 173, 226, 0.1);
+    box-shadow:
+        inset 0 0 0 1px rgba(93, 173, 226, 0.3),
+        0 4px 0 2px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(93, 173, 226, 0.3);
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Minecraft-style button */
+.btn {
+    width: 100%;
+    padding: 16px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    background: linear-gradient(180deg, #7CBD2B 0%, #5A9B1F 100%);
+    border: 3px solid #5A9B1F;
+    color: var(--text-white);
+    text-shadow: 2px 2px 0 var(--text-shadow);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.1s;
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.2),
+        inset 0 -4px 0 2px rgba(0, 0, 0, 0.2),
+        0 6px 0 2px rgba(0, 0, 0, 0.4);
+}
+
+.btn:hover {
+    background: linear-gradient(180deg, #8CD73B 0%, #6AAB2F 100%);
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.3),
+        inset 0 -4px 0 2px rgba(0, 0, 0, 0.2),
+        0 8px 0 2px rgba(0, 0, 0, 0.4);
+}
+
+.btn:active {
+    transform: translateY(4px);
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.2),
+        inset 0 2px 0 2px rgba(0, 0, 0, 0.3),
+        0 2px 0 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Toggle text */
+.toggle-text {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.toggle-link {
+    color: var(--diamond);
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.toggle-link:hover {
+    color: var(--gold);
+}
+
+/* Success/Error messages */
+.message {
+    padding: 12px;
+    margin-bottom: 20px;
+    font-size: 8px;
+    border: 2px solid;
+    text-align: center;
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-10px);
+    }
+
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+.error {
+    background: rgba(255, 85, 85, 0.2);
+    border-color: var(--error-red);
+    color: var(--error-red);
+}
+
+.success {
+    background: rgba(85, 255, 85, 0.2);
+    border-color: var(--success-green);
+    color: var(--success-green);
+}
+
+/* Particle effects */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--emerald);
+    animation: fall linear infinite;
+    opacity: 0;
+}
+
+@keyframes fall {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px) rotate(0deg);
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 540px) {
+    .panel {
+        width: 90%;
+        padding: 30px 20px;
+    }
+
+    .logo h1 {
+        font-size: 16px;
+    }
+
+    .btn {
+        font-size: 10px;
+    }
+}

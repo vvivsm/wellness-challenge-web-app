@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Quest - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="soup-logo">
+                    <div class="mini-bowl"></div>
+                </div>
+                <span>WELLNESS QUEST</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active">HOME</a>
+                <a href="challenges.html" class="nav-link">CHALLENGES</a>
+                <a href="shop.html" class="nav-link">SHOP</a>
+                <a href="craft.html" class="nav-link">CRAFTING</a>
+                <a href="login.html" class="nav-link logout">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="page-header">
+        <h1 class="page-title">HOME</h1>
+        <p class="page-subtitle">Crafting soups good for the soul
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Player Stats Panel -->
+        <div class="stats-panel">
+            <h2 class="panel-title">INVENTORY</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon gold-icon"></div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="playerPoints">1,250</div>
+                        <div class="stat-label">POINTS</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon emerald-icon"></div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="completedChallenges">23</div>
+                        <div class="stat-label">CHALLENGES</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon diamond-icon"></div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="craftedSoups">7</div>
+                        <div class="stat-label">SOUPS CRAFTED</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon chest-icon"></div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="ingredientsOwned">15</div>
+                        <div class="stat-label">INGREDIENTS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Quest -->
+        <div class="quest-section">
+            <h2 class="section-title">
+                <span class="title-icon">⭐</span>
+                DAILY QUEST
+                <span class="title-icon">⭐</span>
+            </h2>
+            <div class="daily-quest-card">
+                <div class="quest-header">
+                    <h3>HYDRATION HERO</h3>
+                    <div class="quest-reward">
+                        <span class="reward-icon">💰</span>
+                        <span>+200 POINTS</span>
+                    </div>
+                </div>
+                <p class="quest-description">Drink 8 glasses of water today</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 62.5%"></div>
+                    <span class="progress-text">5 / 8</span>
+                </div>
+                <div class="quest-timer">
+                    <span class="timer-icon">⏰</span>
+                    <span>Resets in: 7h 32m</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2 class="section-title">QUICK ACTIONS</h2>
+            <div class="action-grid">
+                <a href="challenges.html" class="action-card">
+                    <div class="action-icon challenge-icon"></div>
+                    <div class="action-label">START CHALLENGE</div>
+                    <div class="action-description">Complete wellness tasks</div>
+                </a>
+                <a href="shop.html" class="action-card">
+                    <div class="action-icon shop-icon"></div>
+                    <div class="action-label">VISIT SHOP</div>
+                    <div class="action-description">Buy ingredients</div>
+                </a>
+                <a href="crafting.html" class="action-card">
+                    <div class="action-icon craft-icon"></div>
+                    <div class="action-label">CRAFT SOUP</div>
+                    <div class="action-description">Create wellness potions</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Achievements Preview -->
+        <div class="achievements-section">
+            <h2 class="section-title">LATEST ACHIEVEMENTS</h2>
+            <div class="achievements-grid">
+                <div class="achievement-card unlocked">
+                    <div class="achievement-badge">🏆</div>
+                    <div class="achievement-name">WEEK WARRIOR</div>
+                    <div class="achievement-desc">7 day streak</div>
+                </div>
+                <div class="achievement-card unlocked">
+                    <div class="achievement-badge">🌟</div>
+                    <div class="achievement-name">SOUP MASTER</div>
+                    <div class="achievement-desc">Craft 5 soups</div>
+                </div>
+                <div class="achievement-card locked">
+                    <div class="achievement-badge">🔒</div>
+                    <div class="achievement-name">LEGENDARY</div>
+                    <div class="achievement-desc">1000 challenges</div>
+                </div>
+                <div class="achievement-card locked">
+                    <div class="achievement-badge">🔒</div>
+                    <div class="achievement-name">MILLIONAIRE</div>
+                    <div class="achievement-desc">10,000 points</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 WELLNESS QUEST - STAY HEALTHY, STAY STRONG!</p>
+    </footer>
+
+    <script src="js/index.js"></script>
+</body>
+
+</html>

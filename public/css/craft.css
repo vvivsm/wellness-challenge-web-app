@@ -1,0 +1,580 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --dirt-brown: #8B4513;
+    --grass-green: #7CBD2B;
+    --dark-grass: #5A9B1F;
+    --stone-gray: #7A7A7A;
+    --dark-stone: #4A4A4A;
+    --wood: #9C6B3C;
+    --gold: #FFAA00;
+    --emerald: #17DD62;
+    --diamond: #5DADE2;
+    --text-white: #FFFFFF;
+    --text-shadow: #3F3F3F;
+    --error-red: #FF5555;
+    --success-green: #55FF55;
+    --background: #2C2C2C;
+    --panel-bg: rgba(0, 0, 0, 0.7);
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background: linear-gradient(180deg, #1a1a1a 0%, #2C2C2C 100%);
+    min-height: 100vh;
+    color: var(--text-white);
+    image-rendering: pixelated;
+}
+
+/* Navigation Bar */
+.navbar {
+    background: var(--panel-bg);
+    border-bottom: 4px solid var(--dark-stone);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 12px;
+    color: var(--gold);
+    text-shadow: 2px 2px 0 var(--text-shadow);
+}
+
+.soup-logo {
+    width: 32px;
+    height: 32px;
+    position: relative;
+}
+
+.mini-bowl {
+    width: 28px;
+    height: 16px;
+    background: #8B4513;
+    position: relative;
+    margin: 8px auto 0;
+    box-shadow:
+        0 0 0 2px #654321,
+        inset 0 -2px 0 1px #654321,
+        inset 0 2px 0 1px #A0522D;
+}
+
+.mini-bowl::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 4px;
+    background: #FFA500;
+    top: 4px;
+    left: 2px;
+    box-shadow: 0 0 0 1px #FF8C00;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    color: var(--text-white);
+    text-decoration: none;
+    font-size: 10px;
+    padding: 10px 15px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    text-shadow: 2px 2px 0 var(--text-shadow);
+}
+
+.nav-link:hover {
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+}
+
+.nav-link.active {
+    color: var(--emerald);
+    border-bottom: 2px solid var(--emerald);
+}
+
+.nav-link.logout {
+    color: var(--error-red);
+}
+
+.nav-link.logout:hover {
+    border-bottom-color: var(--error-red);
+}
+
+/* Page Header */
+.page-header {
+    background: linear-gradient(135deg, rgba(93, 173, 226, 0.3) 0%, rgba(59, 138, 184, 0.3) 100%);
+    border-bottom: 4px solid var(--diamond);
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 4px 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.page-title {
+    font-size: 24px;
+    color: var(--diamond);
+    text-shadow: 4px 4px 0 var(--text-shadow);
+    margin-bottom: 15px;
+}
+
+.page-subtitle {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+}
+
+/* Main Container */
+.main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    display: grid;
+    grid-template-columns: 280px 1fr 350px;
+    gap: 30px;
+}
+
+/* Panel Styling */
+.inventory-panel,
+.crafting-panel,
+.recipes-panel {
+    background: var(--panel-bg);
+    border: 4px solid var(--dark-stone);
+    padding: 25px;
+    box-shadow:
+        inset 0 0 0 2px #000000,
+        inset 0 0 0 4px #5A5A5A,
+        0 6px 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.panel-title {
+    font-size: 12px;
+    color: var(--gold);
+    text-shadow: 3px 3px 0 var(--text-shadow);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* Inventory Panel */
+.inventory-panel {
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.inventory-item {
+    background: rgba(0, 0, 0, 0.5);
+    border: 3px solid var(--stone-gray);
+    padding: 15px;
+    text-align: center;
+    cursor: grab;
+    transition: all 0.2s;
+}
+
+.inventory-item:not(.empty):hover {
+    border-color: var(--emerald);
+    transform: scale(1.05);
+}
+
+.inventory-item:active {
+    cursor: grabbing;
+}
+
+.inventory-item.empty {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.inventory-item .item-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.inventory-item .item-name {
+    font-size: 7px;
+    color: var(--text-white);
+    margin-bottom: 5px;
+}
+
+.inventory-item .item-count {
+    font-size: 8px;
+    color: var(--gold);
+}
+
+/* Crafting Panel */
+.crafting-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 3px solid var(--dark-stone);
+}
+
+.crafting-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(2, 80px);
+    gap: 10px;
+}
+
+.crafting-slot {
+    background: rgba(0, 0, 0, 0.5);
+    border: 3px solid var(--stone-gray);
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.crafting-slot.filled {
+    border-color: var(--emerald);
+    background: rgba(23, 221, 98, 0.1);
+}
+
+.crafting-slot.drag-over {
+    border-color: var(--gold);
+    background: rgba(255, 170, 0, 0.2);
+}
+
+.slot-label {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.crafting-slot .ingredient-icon {
+    font-size: 40px;
+}
+
+.crafting-arrow {
+    font-size: 48px;
+    color: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+.result-slot {
+    background: linear-gradient(135deg, rgba(255, 170, 0, 0.2) 0%, rgba(204, 136, 0, 0.2) 100%);
+    border: 4px solid var(--gold);
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 170, 0, 0.3),
+        0 0 20px rgba(255, 170, 0, 0.3);
+}
+
+.slot-placeholder {
+    font-size: 64px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.result-slot .soup-result {
+    font-size: 80px;
+    animation: appear 0.5s ease-out;
+}
+
+@keyframes appear {
+    0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* Crafting Actions */
+.crafting-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.craft-btn,
+.clear-btn {
+    padding: 14px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    border: 3px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-shadow: 2px 2px 0 var(--text-shadow);
+}
+
+.craft-btn {
+    background: linear-gradient(180deg, var(--grass-green) 0%, var(--dark-grass) 100%);
+    border-color: var(--dark-grass);
+    color: var(--text-white);
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.2),
+        0 4px 0 2px rgba(0, 0, 0, 0.4);
+}
+
+.craft-btn:hover {
+    background: linear-gradient(180deg, #8CD73B 0%, #6AAB2F 100%);
+    transform: translateY(-2px);
+}
+
+.craft-btn:active {
+    transform: translateY(2px);
+}
+
+.clear-btn {
+    background: linear-gradient(180deg, var(--stone-gray) 0%, var(--dark-stone) 100%);
+    border-color: var(--dark-stone);
+    color: var(--text-white);
+}
+
+.clear-btn:hover {
+    background: linear-gradient(180deg, #8A8A8A 0%, #5A5A5A 100%);
+}
+
+/* Crafting Hint */
+.crafting-hint {
+    text-align: center;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--dark-stone);
+    line-height: 1.6;
+}
+
+.hint-icon {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Recipes Panel */
+.recipes-panel {
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.recipes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.recipe-card {
+    background: rgba(0, 0, 0, 0.5);
+    border: 3px solid var(--dark-stone);
+    padding: 20px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.recipe-icon {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.recipe-name {
+    font-size: 11px;
+    color: var(--gold);
+    text-shadow: 2px 2px 0 var(--text-shadow);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.recipe-effect {
+    font-size: 7px;
+    color: var(--diamond);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.recipe-ingredients {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.recipe-ingredient {
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--dark-stone);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 8px;
+}
+
+.recipe-ingredient span:first-child {
+    font-size: 20px;
+}
+
+.quick-craft-btn {
+    width: 100%;
+    padding: 12px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 9px;
+    background: linear-gradient(180deg, var(--diamond) 0%, #3B8AB8 100%);
+    border: 3px solid #3B8AB8;
+    color: var(--text-white);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-shadow: 2px 2px 0 var(--text-shadow);
+}
+
+.quick-craft-btn:hover {
+    background: linear-gradient(180deg, #6DC2FF 0%, #4A9BCF 100%);
+    transform: translateY(-2px);
+}
+
+.unlock-requirement {
+    text-align: center;
+    font-size: 7px;
+    color: var(--error-red);
+    padding: 10px;
+    background: rgba(255, 85, 85, 0.1);
+    border: 2px solid var(--error-red);
+    margin-top: 10px;
+}
+
+/* Footer */
+.footer {
+    background: var(--panel-bg);
+    border-top: 4px solid var(--dark-stone);
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.footer p {
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+
+    .inventory-panel,
+    .recipes-panel {
+        position: relative;
+        top: 0;
+        max-height: none;
+    }
+
+    .inventory-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .crafting-grid {
+        grid-template-columns: repeat(3, 70px);
+        grid-template-rows: repeat(2, 70px);
+    }
+
+    .crafting-slot {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .nav-link {
+        font-size: 8px;
+        padding: 8px 10px;
+    }
+
+    .page-title {
+        font-size: 18px;
+    }
+
+    .crafting-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .crafting-grid {
+        grid-template-columns: repeat(2, 60px);
+        grid-template-rows: repeat(3, 60px);
+    }
+
+    .crafting-slot {
+        width: 60px;
+        height: 60px;
+    }
+
+    .result-slot {
+        width: 100px;
+        height: 100px;
+    }
+
+    .inventory-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .main-container {
+        padding: 20px 15px;
+    }
+}
