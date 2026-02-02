@@ -7,6 +7,7 @@ const router = express.Router();
 const challengeController = require('../controllers/challengeController');
 const userController = require('../controllers/userController');
 const completionController = require('../controllers/completionController');
+const jwtMiddleware = require("../middleware/jwtMiddleware")
 const { validateBody } = require('../middleware/request');
 const { attachMessage, sendResponse } = require('../middleware/response');
 
@@ -50,8 +51,8 @@ router.put('/:id',
 
 //Q9
 router.post('/:id',
+    jwtMiddleware.verifyToken,
     challengeController.readChallengeById,
-    userController.readUserById,
     completionController.createCompletion,
     userController.rewardCompletionById,
     completionController.readCompletionById,

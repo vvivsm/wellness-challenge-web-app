@@ -7,11 +7,9 @@ const express = require('express');
 const app = express();
 
 // Enable middleware to parse JSON requests and populate req.body
-// eg.: {"name":"John Doe","email":"john@example.com"}
 app.use(express.json());
 
 // Enable middleware to parse URL-encoded requests and populate req.body
-// eg.: name=John+Doe&email=john%40example.com
 app.use(express.urlencoded(
     // Enables advanced parsing (to nested arrays/objects)
     { extended: false }

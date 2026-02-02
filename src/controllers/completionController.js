@@ -6,14 +6,22 @@ const model = require('../models/completionModel');
 
 //Q9
 module.exports.createCompletion = (req, res, next) => {
-    if (req.body.user_id === undefined ||
-        req.body.details === undefined) {
+
+    const userIdFromToken = res.locals.userId;
+
+    const bodyUserId = req.body ? req.body.user_id : undefined;
+
+    if (userIdFromToken === undefined || req.params.id === undefined || req.body.details === undefined) {
         return res.status(400).json({ message: "Missing required data" });
     }
 
+    if (bodyUserId !== undefined && parseInt(bodyUserId) !== parseInt(userIdFromToken)) {
+        return res.status(401).json({ message: "User mismatch" });
+    }
+
     const data = {
-        challenge_id: req.params.id, 
-        user_id: req.body.user_id,
+        challenge_id: req.params.id,
+        user_id: userIdFromToken,     
         details: req.body.details
     };
 
@@ -29,6 +37,7 @@ module.exports.createCompletion = (req, res, next) => {
 
     model.insertCompletion(data, callback);
 };
+
 
 //Q9
 module.exports.readCompletionById = (req, res, next) => {

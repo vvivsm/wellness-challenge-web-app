@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wellness Quest - Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/shop.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="soup-logo">
+                    <div class="mini-bowl"></div>
+                </div>
+                <span>WELLNESS QUEST</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="challenges.html" class="nav-link">CHALLENGES</a>
+                <a href="shop.html" class="nav-link active">SHOP</a>
+                <a href="craft.html" class="nav-link">CRAFTING</a>
+                <a href="login.html" class="nav-link logout" id="logoutBtn">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="page-header">
+        <h1 class="page-title">INGREDIENT SHOP</h1>
+        <p class="page-subtitle">Buy ingredients with points to craft powerful wellness soups!</p>
+
+        <div class="player-currency">
+            <div class="currency-display">
+                <span class="currency-icon">💰</span>
+                <span class="currency-value" id="playerPoints">—</span>
+                <span class="currency-label">POINTS</span>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div id="shopMessage" class="shop-message" style="display:none;"></div>
+    </div>
+
+    <!-- Shop Content (dynamic) -->
+    <div class="shop-content" id="shopContent">
+        <!-- Sections will be injected by shop.js -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 WELLNESS QUEST - STAY HEALTHY, STAY STRONG!</p>
+    </footer>
+
+    <script src="js/shop.js"></script>
+</body>
+
+</html>

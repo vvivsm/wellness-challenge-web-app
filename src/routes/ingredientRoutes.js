@@ -20,5 +20,4 @@ router.get('/:ingredient_id',
     sendResponse()
 );
 
-
 module.exports = router;
