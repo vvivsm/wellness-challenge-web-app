@@ -115,11 +115,16 @@ module.exports.updateUserById = (req, res, next) => {
 
 //Q9
 module.exports.rewardCompletionById = (req, res, next) => {
+    const userIdFromToken = res.locals.userId;
+
+    if (userIdFromToken === undefined || req.params.id === undefined) {
+        return res.status(400).json({ message: "Missing required data" });
+    }
+
     const data = {
-        user_id: req.body.user_id,
+        user_id: userIdFromToken,   
         challenge_id: req.params.id
     };
-
     const callback = (error, results) => {
         if (error) {
             console.error(error);

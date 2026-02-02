@@ -35,7 +35,7 @@ module.exports.readIngredientById = (req, res, next) => {
             return res.status(404).json({ message: "Ingredient not found" });
         }
 
-        res.locals.data = results[0]; 
+        res.locals.ingredient = results[0]; 
         next();
     };
 

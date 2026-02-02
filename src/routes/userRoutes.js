@@ -45,7 +45,7 @@ router.put('/:user_id',
 
 //Deducts points, adds ingredient to inventory
 //Buy ingredient
-router.post('/ingredients/:ingredient_id/buy',
+router.post('/:user_id/ingredients/:ingredient_id/buy',
     jwtMiddleware.verifyToken,
     ingredientController.readIngredientById,
     userIngredientController.buyIngredient,

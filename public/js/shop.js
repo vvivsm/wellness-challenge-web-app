@@ -1,13 +1,12 @@
 // ------------------------------
 // CONFIG
 // ------------------------------
-var BASE_URL = "http://localhost:3000"; // IMPORTANT if you use Live Server
-var INGREDIENTS_ENDPOINT = "/api/ingredients";
-var BUY_ENDPOINT_PREFIX = "/api/ingredientsPIGAIGR??"; // <-- REMOVE THIS LINE IF YOU HAVE IT (ignore)
-var BUY_PREFIX = "/api/ingredients/"; // + id + "/buy"
+var BASE_URL = "http://localhost:3000"; // Live Server needs this
+var INGREDIENTS_ENDPOINT = "/api/ingredients"; // list all ingredients
+var BUY_PREFIX = "/api/users/"; // + userId + "/ingredients/" + ingredientId + "/buy"
 
 // ------------------------------
-// Helpers
+// ICONS
 // ------------------------------
 var INGREDIENT_ICONS = {
     "Chamomile Petals": "🫖",
@@ -27,8 +26,46 @@ var INGREDIENT_ICONS = {
     "Sharing Noodles": "🍜"
 };
 
+// ------------------------------
+// Helpers
+// ------------------------------
 function $(id) {
     return document.getElementById(id);
+}
+function showStatusModal(type, message) {
+    // type = "success" | "error"
+    var modal = $("statusModal");
+    var title = $("statusModalTitle");
+    var msg = $("statusModalMessage");
+
+    if (!modal || !title || !msg) return;
+
+    modal.classList.remove("success", "error");
+    modal.classList.add(type);
+
+    title.textContent = (type === "success")
+        ? "PURCHASE SUCCESS"
+        : "PURCHASE FAILED";
+
+    msg.textContent = message || "";
+
+    modal.style.display = "flex";
+}
+
+function closeStatusModal() {
+    var modal = $("statusModal");
+    if (modal) modal.style.display = "none";
+}
+
+
+function escapeHtml(str) {
+    if (str === null || str === undefined) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 function showMessage(text, isError) {
@@ -50,49 +87,6 @@ function hideMessage() {
     el.textContent = "";
 }
 
-function escapeHtml(str) {
-    if (str === null || str === undefined) return "";
-    return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-// ------------------------------
-// XHR method
-// ------------------------------
-function xhrMethod(url, method, data, token, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open(method, url, true);
-
-    xhr.setRequestHeader("Content-Type", "application/json");
-    if (token) {
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
-    }
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            var responseData = {};
-            try {
-                if (xhr.responseText) responseData = JSON.parse(xhr.responseText);
-            } catch (e) {
-                console.log("❌ JSON parse failed for:", url);
-                console.log("Status:", xhr.status);
-                console.log("Raw response:", xhr.responseText);
-                responseData = { message: "Invalid JSON response" };
-            }
-            callback(xhr.status, responseData);
-        }
-    };
-
-    xhr.send(data ? JSON.stringify(data) : null);
-}
-
-// ------------------------------
-// Auth
-// ------------------------------
 function getTokenOrRedirect() {
     var token = localStorage.getItem("token");
     if (!token) {
@@ -115,6 +109,33 @@ function setupLogout() {
 }
 
 // ------------------------------
+// JWT helpers
+// ------------------------------
+function parseJwt(token) {
+    try {
+        var base64Url = token.split(".")[1];
+        var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        var jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split("")
+                .map(function (c) {
+                    return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+                })
+                .join("")
+        );
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+}
+
+function getUserIdFromToken(token) {
+    var payload = parseJwt(token);
+    if (!payload) return null;
+    return payload.userId || payload.user_id || payload.id || null;
+}
+
+// ------------------------------
 // Render shop
 // ------------------------------
 function typeMeta(type) {
@@ -133,28 +154,26 @@ function buildSectionHtml(type, items) {
 
     html += '<div class="shop-section type-' + type + '">';
     html += '  <h2 class="section-title">';
-    html += '<span class="rarity-badge">' + meta.title + '</span>';
+    html += '    <span class="rarity-badge">' + meta.title + "</span>";
     html += "  </h2>";
     html += '  <div class="items-grid">';
 
     for (var i = 0; i < items.length; i++) {
         var ing = items[i];
-
         var id = ing.id;
         var name = ing.name || "Unknown";
         var cost = ing.cost || 0;
-
-        html += '<div class="item-card type-' + type + '">';
         var icon = INGREDIENT_ICONS[name] || "🥣";
-        html += '      <div class="item-icon">' + icon + '</div>';
+
+        html += '    <div class="item-card type-' + type + '">';
+        html += '      <div class="item-icon">' + icon + "</div>";
         html += '      <h3 class="item-name">' + escapeHtml(name.toUpperCase()) + "</h3>";
         html += '      <p class="item-description">Type: ' + escapeHtml(type) + "</p>";
         html += '      <div class="item-price">';
         html += '        <span class="price-icon">💰</span>';
         html += '        <span class="price-value">' + cost + "</span>";
         html += "      </div>";
-
-        html += '      <button class="add-to-cart-btn" id="buyBtn-' + id + '" data-buy-id="' + id + '">BUY</button>';
+        html += '      <button class="add-to-cart-btn" data-buy-id="' + id + '" data-cost="' + cost + '">BUY</button>';
         html += "    </div>";
     }
 
@@ -194,12 +213,19 @@ function renderShop(ingredients) {
     }
 
     container.innerHTML = html;
+
+    bindBuyButtons();
 }
 
-
+// ------------------------------
+// Bind buy buttons (event delegation)
+// ------------------------------
 function bindBuyButtons() {
     var container = $("shopContent");
     if (!container) return;
+
+    if (container.dataset.buyBound === "true") return;
+    container.dataset.buyBound = "true";
 
     container.addEventListener("click", function (e) {
         var target = e.target;
@@ -212,15 +238,30 @@ function bindBuyButtons() {
     });
 }
 
+// ------------------------------
+// BUY (uses fetchMethod)
+// ------------------------------
 function buyIngredient(ingredientId, buttonEl) {
     hideMessage();
 
     var token = getTokenOrRedirect();
     if (!token) return;
 
-    if (qtyInput) {
-        qty = parseInt(qtyInput.value, 10);
-        if (isNaN(qty) || qty < 1) qty = 1;
+    var userId = getUserIdFromToken(token);
+    if (!userId) {
+        showStatusModal("error", "Invalid session. Please login again.");
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+        return;
+    }
+
+    // Check points before calling backend
+    var cost = parseInt(buttonEl.getAttribute("data-cost")) || 0;
+    var currentPts = parseInt($("playerPoints") ? $("playerPoints").textContent : "0") || 0;
+
+    if (currentPts < cost) {
+        showStatusModal("error", "Not enough points to buy this ingredient.");
+        return;
     }
 
     if (buttonEl) {
@@ -228,46 +269,56 @@ function buyIngredient(ingredientId, buttonEl) {
         buttonEl.textContent = "BUYING...";
     }
 
-    var url = BASE_URL + BUY_PREFIX + ingredientId + "/buy";
-    var data = {};
+    var url = BASE_URL + BUY_PREFIX + userId + "/ingredients/" + ingredientId + "/buy";
 
-    xhrMethod(url, "POST", data, token, function (status, res) {
-        if (buttonEl) {
-            buttonEl.disabled = false;
-            buttonEl.textContent = "BUY";
-        }
+    fetchMethod(url, function (status, res) {
 
+        // ✅ SUCCESS
         if (status === 200 || status === 201) {
-            showMessage(res.message || "Ingredient purchased successfully!", false);
-            // If backend returns updated points, show it:
-            if (res.points !== undefined && $("playerPoints")) {
-                $("playerPoints").textContent = res.points;
-            }
-            return;
-        }
+            showStatusModal(
+                "success",
+                (res && res.message) ? res.message : "Ingredient purchased successfully!"
+            );
 
+            // Update points immediately
+            if ($("playerPoints")) {
+                $("playerPoints").textContent = currentPts - cost;
+            }
+
+            // allow buying again
+            if (buttonEl) {
+                buttonEl.disabled = false;
+                buttonEl.textContent = "BUY";
+            }
+            return; // IMPORTANT: stop here so it won't show error modal
+        }
+        
+        // Unauthorized
         if (status === 401 || status === 403) {
-            showMessage("Session expired. Please login again.", true);
+            showStatusModal("error", (res && res.message) ? res.message : "Unauthorized. Please login again.");
             localStorage.removeItem("token");
             window.location.href = "login.html";
             return;
         }
 
-        showMessage(res.message || ("Purchase failed (HTTP " + status + ")"), true);
-    });
+        // Other errors
+        showStatusModal("error", (res && res.message) ? res.message : ("Purchase failed (HTTP " + status + ")"));
+
+    }, "POST", {}, token);
 }
 
+
 // ------------------------------
-// Load ingredients
+// Load ingredients (uses fetchMethod)
 // ------------------------------
-function loadIngredients(token) {
+function loadIngredients() {
+    var token = getTokenOrRedirect();
+    if (!token) return;
+
     var url = BASE_URL + INGREDIENTS_ENDPOINT;
 
-    xhrMethod(url, "GET", null, token, function (status, res) {
+    fetchMethod(url, function (status, res) {
         if (status === 200) {
-            // Your backend likely returns { message, data }
-            // OR { ingredients: [...] }
-            // OR just [...]
             var list = [];
 
             if (Array.isArray(res)) list = res;
@@ -276,7 +327,7 @@ function loadIngredients(token) {
             else if (Array.isArray(res.results)) list = res.results;
 
             if (!list || list.length === 0) {
-                showMessage("No ingredients found. Your /api/ingredients returned empty.", true);
+                showMessage("No ingredients found from /api/ingredients", true);
                 return;
             }
 
@@ -291,8 +342,28 @@ function loadIngredients(token) {
             return;
         }
 
-        showMessage(res.message || ("Failed to load ingredients (HTTP " + status + ")"), true);
-    });
+        showMessage((res && res.message) ? res.message : ("Failed to load ingredients (HTTP " + status + ")"), true);
+    }, "GET", null, token);
+}
+
+// ------------------------------
+// Load user points (GET /api/users/:id) (uses fetchMethod)
+// ------------------------------
+function loadUserPoints() {
+    var token = getTokenOrRedirect();
+    if (!token) return;
+
+    var userId = getUserIdFromToken(token);
+    if (!userId) return;
+
+    fetchMethod(BASE_URL + "/api/users/" + userId, function (status, res) {
+        if (status === 200 && res) {
+            var user = res.data || res.user || res;
+            if (user && user.points !== undefined && $("playerPoints")) {
+                $("playerPoints").textContent = user.points;
+            }
+        }
+    }, "GET", null, token);
 }
 
 // ------------------------------
@@ -301,11 +372,8 @@ function loadIngredients(token) {
 document.addEventListener("DOMContentLoaded", function () {
     setupLogout();
 
-    var token = getTokenOrRedirect();
-    if (!token) return;
-
-    // If you do not have a points endpoint yet, just show a placeholder:
     if ($("playerPoints")) $("playerPoints").textContent = "—";
 
-    loadIngredients(token);
+    loadUserPoints();
+    loadIngredients();
 });

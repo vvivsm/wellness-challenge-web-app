@@ -5,6 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wellness Quest - Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/shop.css">
 </head>
@@ -56,6 +58,24 @@
         <p>© 2024 WELLNESS QUEST - STAY HEALTHY, STAY STRONG!</p>
     </footer>
 
+    <!-- Status Modal -->
+    <div id="statusModal" class="status-modal" style="display:none;">
+        <div class="status-modal-box">
+            <div class="status-modal-header">
+                <span id="statusModalTitle">STATUS</span>
+                <button class="status-modal-close" onclick="closeStatusModal()">✕</button>
+            </div>
+
+            <div class="status-modal-body">
+                <p id="statusModalMessage"></p>
+                <button class="status-modal-ok" onclick="closeStatusModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/queryCmds.js" type="text/javascript"></script>
+    <script src="js/getCurrentURL.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/shop.js"></script>
 </body>
 

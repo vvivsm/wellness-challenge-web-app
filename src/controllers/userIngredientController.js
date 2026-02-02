@@ -6,11 +6,17 @@ const userModel = require("../models/userModel");
 const userIngredientModel = require("../models/userIngredientModel");
 
 module.exports.buyIngredient = (req, res, next) => {
-    // need res.locals.ingredient (cost) and res.locals.user exists
+    
+    const userId = res.locals.userId;
+    const ingredient = res.locals.ingredient;
+
+    if (userId === undefined || !ingredient || ingredient.cost === undefined) {
+        return res.status(400).json({ message: "Missing required data" });
+    }
 
     const data = {
-        user_id: req.params.user_id,
-        cost: res.locals.ingredient.cost
+        user_id: userId,
+        cost: ingredient.cost
     };
 
     const callback = (error, results) => {
@@ -19,7 +25,6 @@ module.exports.buyIngredient = (req, res, next) => {
             return res.status(500).json({ message: "Internal server error" });
         }
 
-        // If points not enough, affectedRows will be 0 due to AND points >= cost
         if (results.affectedRows === 0) {
             return res.status(403).json({ message: "Insufficient points" });
         }
@@ -30,9 +35,10 @@ module.exports.buyIngredient = (req, res, next) => {
     userModel.deductPoints(data, callback);
 };
 
+
 module.exports.addIngredientToInventory = (req, res, next) => {
     const data = {
-        user_id: req.params.user_id,
+        user_id: res.locals.userId,
         ingredient_id: req.params.ingredient_id
     };
 
@@ -63,7 +69,7 @@ module.exports.addIngredientToInventory = (req, res, next) => {
 };
 
 module.exports.readInventoryByUser = (req, res, next) => {
-    const data = { user_id: req.params.user_id };
+    const data = { user_id: res.locals.userId };
 
     const callback = (error, results) => {
         if (error) {
