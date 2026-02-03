@@ -28,6 +28,7 @@ function fetchMethod(url, callback, method = "GET", data = null, token = null) {
 
     fetch(url, options)
         .then((response) => {
+            console.log(response);
             if (response.status == 204) {
                 callback(response.status, {});
             } else {

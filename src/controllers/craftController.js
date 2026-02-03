@@ -10,7 +10,7 @@ const userCraftedRecipeModel = require("../models/userCraftedRecipeModel");
 
 // 404 if user not found
 module.exports.requireUserExists = (req, res, next) => {
-    const data = {id: req.params.id };
+    const data = { id: req.params.id };
 
     const callback = (error, results) => {
         if (error) {
@@ -68,7 +68,7 @@ module.exports.loadRequirements = (req, res, next) => {
 
 // check inventory is sufficient 
 module.exports.checkInventoryEnough = (req, res, next) => {
-    const data = { user_id: req.params.user_id };
+    const data = { user_id: res.locals.userId };
 
     const callback = (error, results) => {
         if (error) {
@@ -107,7 +107,7 @@ module.exports.checkInventoryEnough = (req, res, next) => {
 // deduct ingredients one-by-one
 module.exports.deductIngredients = (req, res, next) => {
     const requirements = res.locals.requirements;
-    const user_id = req.params.user_id;
+    const user_id = res.locals.userId;
 
     // Index to track which ingredient we are currently deducting
     let index = 0;
@@ -151,7 +151,7 @@ module.exports.deductIngredients = (req, res, next) => {
 // insert crafted record
 module.exports.insertCraftedRecipe = (req, res, next) => {
     const data = {
-        user_id: req.params.user_id,
+        user_id: res.locals.userId,
         recipe_id: req.params.recipe_id
     };
 
@@ -163,7 +163,7 @@ module.exports.insertCraftedRecipe = (req, res, next) => {
 
         res.locals.data = {
             crafted_id: results.insertId,
-            user_id: Number(req.params.user_id),
+            user_id: Number(res.locals.userId),
             recipe_id: Number(req.params.recipe_id),
             recipe_name: res.locals.recipe.name
         };

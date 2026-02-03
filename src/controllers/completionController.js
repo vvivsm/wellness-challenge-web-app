@@ -9,7 +9,7 @@ module.exports.createCompletion = (req, res, next) => {
 
     const userIdFromToken = res.locals.userId;
 
-    const bodyUserId = req.body ? req.body.user_id : undefined;
+    const bodyUserId = req.body ? res.locals.userId : undefined;
 
     if (userIdFromToken === undefined || req.params.id === undefined || req.body.details === undefined) {
         return res.status(400).json({ message: "Missing required data" });
@@ -21,7 +21,7 @@ module.exports.createCompletion = (req, res, next) => {
 
     const data = {
         challenge_id: req.params.id,
-        user_id: userIdFromToken,     
+        user_id: userIdFromToken,
         details: req.body.details
     };
 

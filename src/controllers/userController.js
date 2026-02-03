@@ -26,7 +26,7 @@ module.exports.createUser = (req, res, next) => {
 //Q1, Q3, Q4, Q9
 module.exports.readUserById = (req, res, next) => {
     const data = {
-        id: req.params.id || res.locals.userId || req.params.user_id
+        id: res.locals.userId
     };
 
     const callback = (error, results) => {
@@ -91,7 +91,7 @@ module.exports.readAllUser = (req, res, next) => {
 //Q4
 module.exports.updateUserById = (req, res, next) => {
     const data = {
-        id: req.params.user_id,
+        id: res.locals.userId,
         username: req.body.username,
         points: req.body.points
     };
@@ -122,7 +122,7 @@ module.exports.rewardCompletionById = (req, res, next) => {
     }
 
     const data = {
-        user_id: userIdFromToken,   
+        user_id: userIdFromToken,
         challenge_id: req.params.id
     };
     const callback = (error, results) => {

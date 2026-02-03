@@ -356,7 +356,7 @@ function loadUserPoints() {
     var userId = getUserIdFromToken(token);
     if (!userId) return;
 
-    fetchMethod(BASE_URL + "/api/users/" + userId, function (status, res) {
+    fetchMethod(BASE_URL + "/api/me", function (status, res) {
         if (status === 200 && res) {
             var user = res.data || res.user || res;
             if (user && user.points !== undefined && $("playerPoints")) {

@@ -51,9 +51,51 @@
         </div>
     </div>
 
+    <!-- Create Challenge -->
+    <div class="create-challenge-wrap">
+        <div class="create-challenge-panel">
+            <h2 class="section-title">
+                <span class="title-badge daily">✨ CREATE YOUR OWN CHALLENGE ✨</span>
+            </h2>
+
+            <form id="createChallengeForm" class="create-challenge-form">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label pixel-label" for="newChallengeDesc">DESCRIPTION</label>
+                        <input type="text" id="newChallengeDesc" class="form-control pixel-input"
+                            placeholder="E.g. Take a 10-min walk" maxlength="255" required />
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label pixel-label" for="newChallengePoints">POINTS</label>
+                        <input type="number" id="newChallengePoints" class="form-control pixel-input" min="1" max="999"
+                            value="5" required />
+                    </div>
+
+                    <div class="col-12 col-md-8">
+                        <label class="form-label pixel-label" for="newChallengeType">TYPE</label>
+                        <select id="newChallengeType" class="form-select pixel-input" required>
+                            <option value="sleep">SLEEP</option>
+                            <option value="physical">PHYSICAL</option>
+                            <option value="mental">MENTAL</option>
+                            <option value="social">SOCIAL</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" id="createChallengeBtn" class="challenge-btn start-btn">
+                            CREATE CHALLENGE
+                        </button>
+                    </div>
+                </div>
+
+                <div id="createChallengeError" class="create-challenge-error" style="display:none;"></div>
+            </form>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <div class="main-container">
-
         <!-- Sleep Challenges -->
         <div class="challenges-section" data-category="sleep">
             <h2 class="section-title">

@@ -13,7 +13,8 @@ const { attachMessage, sendResponse } = require('../middleware/response');
 
 //Q5
 router.post('/',
-    validateBody('user_id', 'description', 'points', 'type'),
+    validateBody('description', 'points', 'type'),
+    jwtMiddleware.verifyToken,
     challengeController.createChallenge,
     challengeController.readChallengeById,
     attachMessage("Challenge created successfully", 201),

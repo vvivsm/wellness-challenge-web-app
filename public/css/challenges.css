@@ -176,6 +176,58 @@ body {
     color: rgba(255, 255, 255, 0.7);
 }
 
+/* Create Challenge Panel */
+.create-challenge-wrap {
+    max-width: 1400px;
+    margin: 30px auto 0;
+    padding: 0 30px;
+}
+
+.create-challenge-panel {
+    background: var(--panel-bg);
+    border: 4px solid var(--dark-stone);
+    padding: 30px;
+    box-shadow:
+        inset 0 0 0 2px #000000,
+        inset 0 0 0 4px #5A5A5A,
+        0 6px 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.create-challenge-form {
+    margin-top: 20px;
+}
+
+.pixel-label {
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 0 var(--text-shadow);
+}
+
+.pixel-input {
+    background: rgba(0, 0, 0, 0.6) !important;
+    color: #fff !important;
+    border: 2px solid var(--stone-gray) !important;
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: 10px !important;
+    padding: 12px !important;
+    text-shadow: 1px 1px 0 var(--text-shadow);
+}
+
+.pixel-input:focus {
+    box-shadow: none !important;
+    border-color: var(--emerald) !important;
+}
+
+.create-challenge-error {
+    margin-top: 14px;
+    padding: 12px;
+    border: 2px solid var(--error-red);
+    background: rgba(255, 85, 85, 0.12);
+    font-size: 8px;
+    line-height: 1.6;
+}
+
 /* Main Container */
 .main-container {
     max-width: 1400px;

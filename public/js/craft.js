@@ -136,16 +136,45 @@ function loadAll() {
     loadInventory(userId, token, function () {
         loadRecipes(function () {
             loadAllRequirements(function () {
-                renderInventoryFromMap();
-                renderRecipes();
+
+                loadCraftedRecipes(userId, token, function (craftedList) {
+                    renderInventoryFromMap();
+                    renderRecipes();
+
+                    // after recipes are rendered, mark crafted buttons
+                    for (var i = 0; i < craftedList.length; i++) {
+                        var rid = craftedList[i].recipe_id || craftedList[i].recipeId;
+                        if (rid !== undefined && rid !== null) {
+                            markRecipeAsCrafted(rid);
+                        }
+                    }
+                });
+
             });
         });
     });
 }
 
+function loadCraftedRecipes(userId, token, done) {
+    fetchMethod(currentUrl + "/api/me/crafted", function (status, res) {
+        if (status !== 200) {
+            // just continue, don't block page
+            done([]);
+            return;
+        }
+
+        var list = [];
+        if (Array.isArray(res)) list = res;
+        else if (Array.isArray(res.data)) list = res.data;
+        else if (Array.isArray(res.results)) list = res.results;
+
+        done(list); // [{recipe_id:1}, ...]
+    }, "GET", null, token);
+}
+
 // GET /api/users/:user_id/inventory
 function loadInventory(userId, token, done) {
-    fetchMethod(currentUrl + "/api/users/" + userId + "/inventory", function (status, res) {
+    fetchMethod(currentUrl + "/api/me/inventory", function (status, res) {
         if (status !== 200) {
             showStatusModal("error", (res && res.message) ? res.message : "Failed to load inventory.");
             return;
@@ -350,7 +379,15 @@ function bindCraftButtons() {
     });
 }
 
-// POST /api/users/:user_id/recipes/:recipe_id/craft
+function markRecipeAsCrafted(recipeId) {
+    var btn = document.querySelector('.quick-craft-btn[data-recipe-id="' + recipeId + '"]');
+    if (!btn) return;
+
+    btn.textContent = "CRAFTED ✓";
+    btn.disabled = true;
+    btn.classList.add("crafted-btn");
+}
+
 function craftRecipe(recipeId, buttonEl) {
     var token = getTokenOrRedirect();
     if (!token) return;
@@ -368,7 +405,7 @@ function craftRecipe(recipeId, buttonEl) {
         buttonEl.textContent = "CRAFTING...";
     }
 
-    fetchMethod(currentUrl + "/api/users/" + userId + "/recipes/" + recipeId + "/craft",
+    fetchMethod(currentUrl + "/api/me/recipes/" + recipeId + "/craft",
         function (status, res) {
             if (status === 201 || status === 200) {
                 showStatusModal("success", (res && res.message) ? res.message : "Recipe crafted successfully!");
@@ -386,7 +423,7 @@ function craftRecipe(recipeId, buttonEl) {
             showStatusModal("error", (res && res.message) ? res.message : ("Craft failed (HTTP " + status + ")"));
         },
         "POST",
-        {},  // body not needed
+        {},
         token
     );
 }

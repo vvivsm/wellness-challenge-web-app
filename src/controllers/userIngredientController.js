@@ -6,7 +6,7 @@ const userModel = require("../models/userModel");
 const userIngredientModel = require("../models/userIngredientModel");
 
 module.exports.buyIngredient = (req, res, next) => {
-    
+
     const userId = res.locals.userId;
     const ingredient = res.locals.ingredient;
 
@@ -70,6 +70,8 @@ module.exports.addIngredientToInventory = (req, res, next) => {
 
 module.exports.readInventoryByUser = (req, res, next) => {
     const data = { user_id: res.locals.userId };
+
+    console.log(data);
 
     const callback = (error, results) => {
         if (error) {

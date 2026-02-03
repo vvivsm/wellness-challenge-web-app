@@ -20,7 +20,7 @@ function loadUserPoints() {
         }
     };
 
-    fetchMethod(currentUrl + "/api/users/" + userId, callback, "GET", null, token);
+    fetchMethod(currentUrl + "/api/me", callback, "GET", null, token);
 }
 
 function showNotification(message, type) {
@@ -174,7 +174,8 @@ function loadChallenges() {
         }
     };
 
-    fetchMethod(currentUrl + "/api/challenges", callback, "GET", null, null);
+    const token = localStorage.getItem("token");
+    fetchMethod(currentUrl + "/api/challenges", callback, "GET", null, token);
 }
 
 // ---------------- Modal handling + completion ----------------
@@ -381,6 +382,118 @@ function recordCompletion(userId, challengeId) {
     }
 }
 
+function setCreateChallengeError(msg) {
+    const el = document.getElementById("createChallengeError");
+    if (!el) return;
+
+    if (!msg) {
+        el.style.display = "none";
+        el.textContent = "";
+        return;
+    }
+
+    el.textContent = msg;
+    el.style.display = "block";
+}
+
+function appendChallengeToUI(ch) {
+    const gridId = getGridIdByType(ch.type);
+    if (!gridId) return;
+
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+
+    grid.appendChild(makeChallengeCard(ch));
+}
+
+const MAX_CHALLENGE_POINTS = 20;
+function createChallenge() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("Please login to create challenges!");
+        window.location.href = "login.html";
+        return;
+    }
+
+    setCreateChallengeError("");
+
+    const descEl = document.getElementById("newChallengeDesc");
+    const ptsEl = document.getElementById("newChallengePoints");
+    const typeEl = document.getElementById("newChallengeType");
+    const btnEl = document.getElementById("createChallengeBtn");
+
+    if (!descEl || !ptsEl || !typeEl || !btnEl) return;
+
+    const description = (descEl.value || "").trim();
+    const points = parseInt(ptsEl.value, 10);
+    const type = typeEl.value;
+
+    if (!description) {
+        setCreateChallengeError("Please enter a description.");
+        return;
+    }
+
+    if (isNaN(points) || points < 1) {
+        setCreateChallengeError("Points must be at least 1.");
+        return;
+    }
+
+    if (points > MAX_CHALLENGE_POINTS) {
+        setCreateChallengeError("Maximum points allowed is " + MAX_CHALLENGE_POINTS + ".");
+        return;
+    }
+
+    // lock UI
+    btnEl.disabled = true;
+    btnEl.textContent = "CREATING...";
+
+    const postData = {
+        description: description,
+        points: points,
+        type: type
+    };
+
+    const callback = (status, data) => {
+        console.log("POST /api/challenges status:", status);
+        console.log("POST /api/challenges data:", data);
+
+        // unlock UI
+        btnEl.disabled = false;
+        btnEl.textContent = "CREATE CHALLENGE";
+
+        if (status === 201 && data) {
+            // Your sendResponse wrapper might be:
+            // { message: "...", data: { id, description, points, type } }
+            // or { challenge: {...} } etc.
+            const created = data.data || data.challenge || data;
+
+            if (!created || typeof created.id === "undefined") {
+                showNotification("Created, but response shape is unexpected.", "error");
+                return;
+            }
+
+            // add to UI immediately
+            appendChallengeToUI(created);
+
+            // reset form
+            descEl.value = "";
+            ptsEl.value = 5;
+            typeEl.value = "sleep";
+
+            showNotification("Challenge created!", "success");
+            return;
+        }
+
+        // show server-side error
+        const msg = (data && data.message) ? data.message : "Failed to create challenge";
+        setCreateChallengeError(msg);
+        showNotification(msg, "error");
+    };
+
+    fetchMethod(currentUrl + "/api/challenges", callback, "POST", postData, token);
+}
+
+
 // ---------------- Events ----------------
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Challenges page loaded!");
@@ -415,4 +528,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         openCompletionModal(challengeId, btn);
     });
+
+    // Create Challenge form
+    const createForm = document.getElementById("createChallengeForm");
+    if (createForm) {
+        createForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            createChallenge();
+        });
+    }
 });

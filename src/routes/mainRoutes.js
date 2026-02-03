@@ -14,10 +14,11 @@ const recipeRoutes = require('./recipeRoutes');
 const authRoutes= require('./authRoutes')
 
 // Mount sub routers to their respective paths
-router.use('/users', userRoutes);
+router.use('/me', userRoutes);
 router.use('/challenges', challengeRoutes);
 router.use('/ingredients', ingredientRoutes);
 router.use('/recipes', recipeRoutes);
 router.use('/auth', authRoutes);
+
 // Export main router with routes
 module.exports = router;

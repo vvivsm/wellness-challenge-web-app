@@ -3,8 +3,8 @@ const userCraftedRecipeModel = require("../models/userCraftedRecipeModel");
 
 // Middleware: prevent crafting same recipe more than once
 module.exports.checkNotCraftedBefore = (req, res, next) => {
-    const tokenUserId = res.locals.userId;         
-    const paramUserId = req.params.user_id;            
+    const tokenUserId = res.locals.userId;
+    const paramUserId = res.locals.userId;
     const recipeId = req.params.recipe_id;
 
     if (!tokenUserId || !paramUserId || !recipeId) {
@@ -41,7 +41,7 @@ module.exports.checkNotCraftedBefore = (req, res, next) => {
 // GET list of crafted recipes for UI
 module.exports.readCraftedByUser = (req, res, next) => {
     const tokenUserId = res.locals.userId;
-    const paramUserId = req.params.user_id;
+    const paramUserId = res.locals.userId;
 
     if (!tokenUserId || !paramUserId) {
         return res.status(400).json({ message: "Missing required data" });

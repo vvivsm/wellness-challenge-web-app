@@ -145,12 +145,14 @@ body {
 
 /* Main Container */
 .main-container {
-    max-width: 1400px;
+    width: min(1400px, 95vw);
     margin: 0 auto;
-    padding: 40px 30px;
     display: grid;
-    grid-template-columns: 280px 1fr 350px;
-    gap: 30px;
+    grid-template-columns: 280px 1fr;
+    /* inventory smaller, recipe book bigger */
+    gap: 28px;
+    align-items: start;
+    padding: 30px 20px 60px;
 }
 
 /* Panel Styling */

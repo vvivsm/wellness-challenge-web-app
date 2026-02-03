@@ -6,8 +6,25 @@ const model = require('../models/challengeModel');
 
 //Q5
 module.exports.createChallenge = (req, res, next) => {
+
+    const MAX_CHALLENGE_POINTS = 20;
+
+    const points = parseInt(req.body.points, 10);
+
+    if (isNaN(points) || points < 1) {
+        return res.status(400).json({
+            message: "Points must be at least 1"
+        });
+    }
+
+    if (points > MAX_CHALLENGE_POINTS) {
+        return res.status(400).json({
+            message: "Maximum points allowed is " + MAX_CHALLENGE_POINTS
+        });
+    }
+    
     const data = {
-        creator_id: req.body.user_id,
+        creator_id: res.locals.userId,
         description: req.body.description,
         points: req.body.points,
         type: req.body.type
@@ -120,7 +137,7 @@ module.exports.requireMatchingCreatorId = (req, res, next) => {
             return res.status(404).json({ message: "Challenge not found" });
         }
 
-        if (results[0].creator_id != req.body.user_id) {
+        if (results[0].creator_id != res.locals.userId) {
             return res.status(403).json({ message: "Forbidden: not the correct owner" });
         }
 

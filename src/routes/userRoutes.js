@@ -13,40 +13,9 @@ const jwtMiddleware = require("../middleware/jwtMiddleware")
 const { validateBody } = require('../middleware/request');
 const { attachMessage, sendResponse } = require('../middleware/response');
 
-//Q1
-router.post('/',
-    validateBody('username'),
-    userController.requireUniqueUsername,
-    userController.createUser,
-    userController.readUserById,
-    attachMessage("User created successfully", 201),
-    sendResponse()
-);
-
-//Q2
-router.get('/',
-    userController.readAllUser,
-    sendResponse()
-);
-
-//Q3
-router.get('/:user_id',
-    userController.readUserById,
-    sendResponse()
-)
-
-//Q4
-router.put('/:user_id',
-    userController.requireUniqueUsername,
-    userController.updateUserById,
-    userController.readUserById,
-    attachMessage("User updated successfully", 200),
-    sendResponse()
-);
-
 //Deducts points, adds ingredient to inventory
 //Buy ingredient
-router.post('/:user_id/ingredients/:ingredient_id/buy',
+router.post('/ingredients/:ingredient_id/buy',
     jwtMiddleware.verifyToken,
     ingredientController.readIngredientById,
     userIngredientController.buyIngredient,
@@ -57,7 +26,7 @@ router.post('/:user_id/ingredients/:ingredient_id/buy',
 );
 
 //Get inventory of a user
-router.get('/:user_id/inventory',
+router.get('/inventory',
     jwtMiddleware.verifyToken,
     userIngredientController.readInventoryByUser,
     attachMessage("Inventory retrieved successfully", 200),
@@ -65,7 +34,7 @@ router.get('/:user_id/inventory',
 );
 
 //Craft a recipe
-router.post('/:user_id/recipes/:recipe_id/craft',
+router.post('/recipes/:recipe_id/craft',
     jwtMiddleware.verifyToken,
     craftController.requireRecipeExists,
     userCraftedRecipeController.checkNotCraftedBefore,
@@ -77,10 +46,43 @@ router.post('/:user_id/recipes/:recipe_id/craft',
     sendResponse()
 );
 
-router.get('/:user_id/crafted',
+router.get('/crafted',
     jwtMiddleware.verifyToken,
     userCraftedRecipeController.readCraftedByUser,
     attachMessage("Crafted recipes retrieved successfully", 200),
+    sendResponse()
+);
+
+// //Q1
+// router.post('/',
+//     validateBody('username'),
+//     userController.requireUniqueUsername,
+//     userController.createUser,
+//     userController.readUserById,
+//     attachMessage("User created successfully", 201),
+//     sendResponse()
+// );
+
+// //Q2
+// router.get('/',
+//     userController.readAllUser,
+//     sendResponse()
+// );
+
+//Q3
+router.get('/',
+    jwtMiddleware.verifyToken,
+    userController.readUserById,
+    sendResponse()
+)
+
+//Q4
+router.put('/',
+    jwtMiddleware.verifyToken,
+    userController.requireUniqueUsername,
+    userController.updateUserById,
+    userController.readUserById,
+    attachMessage("User updated successfully", 200),
     sendResponse()
 );
 
