@@ -8,6 +8,7 @@ const userController = require('../controllers/userController');
 const userIngredientController = require("../controllers/userIngredientController");
 const ingredientController = require('../controllers/ingredientController');
 const craftController = require("../controllers/craftController");
+const userCraftedRecipeController = require("../controllers/userCraftedRecipeController");
 const jwtMiddleware = require("../middleware/jwtMiddleware")
 const { validateBody } = require('../middleware/request');
 const { attachMessage, sendResponse } = require('../middleware/response');
@@ -56,7 +57,7 @@ router.post('/:user_id/ingredients/:ingredient_id/buy',
 );
 
 //Get inventory of a user
-router.get('/inventory',
+router.get('/:user_id/inventory',
     jwtMiddleware.verifyToken,
     userIngredientController.readInventoryByUser,
     attachMessage("Inventory retrieved successfully", 200),
@@ -64,14 +65,22 @@ router.get('/inventory',
 );
 
 //Craft a recipe
-router.post('/recipes/:recipe_id/craft',
+router.post('/:user_id/recipes/:recipe_id/craft',
     jwtMiddleware.verifyToken,
     craftController.requireRecipeExists,
+    userCraftedRecipeController.checkNotCraftedBefore,
     craftController.loadRequirements,
     craftController.checkInventoryEnough,
     craftController.deductIngredients,
     craftController.insertCraftedRecipe,
     attachMessage("Recipe crafted successfully", 201),
+    sendResponse()
+);
+
+router.get('/:user_id/crafted',
+    jwtMiddleware.verifyToken,
+    userCraftedRecipeController.readCraftedByUser,
+    attachMessage("Crafted recipes retrieved successfully", 200),
     sendResponse()
 );
 

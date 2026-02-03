@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wellness Quest - Crafting</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/craft.css">
@@ -24,7 +24,7 @@
                 <a href="challenges.html" class="nav-link">CHALLENGES</a>
                 <a href="shop.html" class="nav-link">SHOP</a>
                 <a href="craft.html" class="nav-link active">CRAFTING</a>
-                <a href="login.html" class="nav-link logout">LOGOUT</a>
+                <a href="login.html" class="nav-link logout" id="logoutBtn">LOGOUT</a>
             </div>
         </div>
     </nav>
@@ -32,53 +32,17 @@
     <!-- Header -->
     <div class="page-header">
         <h1 class="page-title">SOUP CRAFTING</h1>
-        <p class="page-subtitle">Combine ingredients to create powerful wellness soups!</p>
+        <p class="page-subtitle">Craft soups using ingredients from your inventory!</p>
     </div>
 
     <!-- Main Content -->
     <div class="main-container">
+
         <!-- Inventory Panel -->
         <div class="inventory-panel">
             <h2 class="panel-title">YOUR INGREDIENTS</h2>
             <div class="inventory-grid" id="inventoryGrid">
-                <div class="inventory-item" draggable="true" data-ingredient="carrot">
-                    <div class="item-icon">🥕</div>
-                    <div class="item-name">CARROT</div>
-                    <div class="item-count">x5</div>
-                </div>
-                <div class="inventory-item" draggable="true" data-ingredient="onion">
-                    <div class="item-icon">🧅</div>
-                    <div class="item-name">ONION</div>
-                    <div class="item-count">x3</div>
-                </div>
-                <div class="inventory-item" draggable="true" data-ingredient="potato">
-                    <div class="item-icon">🥔</div>
-                    <div class="item-name">POTATO</div>
-                    <div class="item-count">x7</div>
-                </div>
-                <div class="inventory-item" draggable="true" data-ingredient="mushroom">
-                    <div class="item-icon">🍄</div>
-                    <div class="item-name">MUSHROOM</div>
-                    <div class="item-count">x2</div>
-                </div>
-                <div class="inventory-item" draggable="true" data-ingredient="garlic">
-                    <div class="item-icon">🧄</div>
-                    <div class="item-name">GARLIC</div>
-                    <div class="item-count">x4</div>
-                </div>
-                <div class="inventory-item" draggable="true" data-ingredient="chili">
-                    <div class="item-icon">🌶️</div>
-                    <div class="item-name">CHILI</div>
-                    <div class="item-count">x1</div>
-                </div>
-                <div class="inventory-item empty">
-                    <div class="item-icon">❌</div>
-                    <div class="item-name">EMPTY</div>
-                </div>
-                <div class="inventory-item empty">
-                    <div class="item-icon">❌</div>
-                    <div class="item-name">EMPTY</div>
-                </div>
+                <!-- injected by craft.js -->
             </div>
         </div>
 
@@ -86,108 +50,34 @@
         <div class="recipes-panel">
             <h2 class="panel-title">RECIPE BOOK</h2>
             <div class="recipes-container" id="recipesContainer">
+                <!-- injected by craft.js -->
+            </div>
+        </div>
 
-                <!-- Recipe Card 1 -->
-                <div class="recipe-card unlocked">
-                    <div class="recipe-icon">🍲</div>
-                    <h3 class="recipe-name">ENERGY ELIXIR</h3>
-                    <p class="recipe-effect">+20 Energy • +10 Focus</p>
-                    <div class="recipe-ingredients">
-                        <div class="recipe-ingredient">
-                            <span>🥕</span>
-                            <span>x2</span>
-                        </div>
-                        <div class="recipe-ingredient">
-                            <span>🧅</span>
-                            <span>x1</span>
-                        </div>
-                        <div class="recipe-ingredient">
-                            <span>🥔</span>
-                            <span>x1</span>
-                        </div>
-                    </div>
-                    <button class="quick-craft-btn" onclick="quickCraft('energy')">
-                         CRAFT
-                    </button>
-                </div>
+    </div>
 
-                <!-- Recipe Card 2 -->
-                <div class="recipe-card unlocked">
-                    <div class="recipe-icon">🍜</div>
-                    <h3 class="recipe-name">IMMUNITY BOOST</h3>
-                    <p class="recipe-effect">+30 Health • +15 Defense</p>
-                    <div class="recipe-ingredients">
-                        <div class="recipe-ingredient">
-                            <span>🧄</span>
-                            <span>x2</span>
-                        </div>
-                        <div class="recipe-ingredient">
-                            <span>🍄</span>
-                            <span>x1</span>
-                        </div>
-                        <div class="recipe-ingredient">
-                            <span>🧅</span>
-                            <span>x1</span>
-                        </div>
-                    </div>
-                    <button class="quick-craft-btn" onclick="quickCraft('immunity')">
-                         CRAFT
-                    </button>
-                </div>
-
-                <!-- Recipe Card 3 -->
-                <div class="recipe-card unlocked">
-                    <div class="recipe-icon">🥘</div>
-                    <h3 class="recipe-name">METABOLISM FIRE</h3>
-                    <p class="recipe-effect">+25 Speed • +20 Power</p>
-                    <div class="recipe-ingredients">
-                        <div class="recipe-ingredient">
-                            <span>🌶️</span>
-                            <span>x1</span>
-                        </div>
-                        <div class="recipe-ingredient">
-                            <span>🧄</span>
-                            <span>x1</span>
-                        </div>
-                        <div class="recipe-ingredient">
-                            <span>🥕</span>
-                            <span>x1</span>
-                        </div>
-                    </div>
-                    <button class="quick-craft-btn" onclick="quickCraft('metabolism')">
-                        CRAFT
-                    </button>
-                </div>
-
-                <!-- Recipe Card 4 -->
-                <div class="recipe-card unlocked">
-                    <div class="recipe-icon">🥣</div>
-                    <h3 class="recipe-name">CALM CHAMOMILE</h3>
-                    <p class="recipe-effect">+40 Relaxation • -30 Stress</p>
-                    <div class="recipe-ingredients">
-                        <div class="recipe-ingredient">
-                            <span>🍄</span>
-                            <span>x2</span>
-                        </div>
-                        <div class="recipe-ingredient">
-                            <span>🥔</span>
-                            <span>x2</span>
-                        </div>
-                    </div>
-                    <button class="quick-craft-btn" onclick="quickCraft('calm')">
-                         CRAFT
-                    </button>
-                </div>
-
+    <!-- CSS Modal (status) -->
+    <div class="status-modal" id="statusModal">
+        <div class="status-modal-box" id="statusModalBox">
+            <div class="status-modal-header">
+                <div class="status-modal-title" id="statusTitle">STATUS</div>
+                <button class="status-modal-close" id="statusCloseBtn">×</button>
+            </div>
+            <div class="status-modal-body">
+                <p id="statusMessage">...</p>
+            </div>
+            <div class="status-modal-footer">
+                <button class="status-modal-ok" id="statusOkBtn">OK</button>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <p>© 2024 WELLNESS QUEST - STAY HEALTHY, STAY STRONG!</p>
     </footer>
 
+    <script src="js/queryCmds.js" type="text/javascript"></script>
+    <script src="js/getCurrentURL.js" type="text/javascript"></script>
     <script src="js/craft.js"></script>
 </body>
 

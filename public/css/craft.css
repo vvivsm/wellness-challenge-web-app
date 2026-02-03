@@ -400,17 +400,9 @@ body {
 }
 
 /* Recipes Panel */
-.recipes-panel {
-    position: sticky;
-    top: 100px;
-    max-height: calc(100vh - 120px);
-    overflow-y: auto;
-}
-
-.recipes-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.recipes-panel, .recipes-container {
+    overflow: visible;
+    max-height: none;
 }
 
 .recipe-card {
@@ -491,6 +483,98 @@ body {
     background: rgba(255, 85, 85, 0.1);
     border: 2px solid var(--error-red);
     margin-top: 10px;
+}
+
+.status-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    font-family: "Press Start 2P", monospace;
+}
+
+.status-modal.show {
+    display: flex;
+}
+
+.status-modal-box {
+    width: min(720px, 92vw);
+    background: #0b0b0b;
+    border: 3px solid #2cff66;
+    box-shadow: 0 0 0 4px rgba(44, 255, 102, 0.15);
+}
+
+.status-modal-box.error {
+    border-color: #ff4d4d;
+    box-shadow: 0 0 0 4px rgba(255, 77, 77, 0.15);
+}
+
+.status-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 2px solid rgba(44, 255, 102, 0.35);
+}
+
+.status-modal-box.error .status-modal-header {
+    border-bottom-color: rgba(255, 77, 77, 0.35);
+}
+
+.status-modal-title {
+    font-size: 14px;
+    color: #2cff66;
+}
+
+.status-modal-box.error .status-modal-title {
+    color: #ff4d4d;
+}
+
+.status-modal-close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.status-modal-body {
+    padding: 18px 16px;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.status-modal-footer {
+    padding: 14px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.status-modal-ok {
+    padding: 10px 14px;
+    border: 2px solid #2cff66;
+    background: #0f2a14;
+    color: #fff;
+    cursor: pointer;
+}
+
+.status-modal-box.error .status-modal-ok {
+    border-color: #ff4d4d;
+    background: #2a0f0f;
+}
+
+/* optional: requirements styling */
+.recipe-ingredient.missing {
+    opacity: 0.75;
+}
+
+.recipe-ingredient.missing span:last-child {
+    color: #ff4d4d;
 }
 
 /* Footer */
