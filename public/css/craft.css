@@ -490,6 +490,26 @@ body {
     color: #ff4d4d;
 }
 
+.sell-btn {
+    margin-top: 8px;
+    padding: 6px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 7px;
+    background: linear-gradient(180deg, #ffb347 0%, #ff8c00 100%);
+    border: 2px solid #cc7000;
+    color: #000;
+    cursor: pointer;
+}
+
+.sell-btn:hover {
+    background: linear-gradient(180deg, #ffd27f 0%, #ff9f1a 100%);
+}
+
+.sell-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
     .main-container {

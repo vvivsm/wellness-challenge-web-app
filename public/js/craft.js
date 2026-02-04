@@ -139,6 +139,7 @@ function loadAll() {
 
                 loadCraftedRecipes(userId, token, function (craftedList) {
                     renderInventoryFromMap();
+                    bindSellButtons();
                     renderRecipes();
 
                     // after recipes are rendered, mark crafted buttons
@@ -255,26 +256,85 @@ function renderInventoryFromMap() {
     if (!grid) return;
 
     var keys = Object.keys(inventoryMap);
-    if (keys.length === 0) {
-        grid.innerHTML = '<div class="inventory-empty">No ingredients yet. Buy some from the shop!</div>';
-        return;
-    }
-
     var html = "";
+
     for (var i = 0; i < keys.length; i++) {
         var ingId = keys[i];
         var item = inventoryMap[ingId];
+
         if (item.quantity <= 0) continue;
+
         var icon = INGREDIENT_ICONS[item.name] || "🥣";
 
-        html += '<div class="inventory-item">';
-        html += '  <div class="item-icon">' + icon + "</div>";
-        html += '  <div class="item-name">' + String(item.name).toUpperCase() + "</div>";
-        html += '  <div class="item-count">x' + item.quantity + "</div>";
-        html += "</div>";
+        html += `
+            <div class="inventory-item">
+                <div class="item-icon">${icon}</div>
+                <div class="item-name">${String(item.name).toUpperCase()}</div>
+                <div class="item-count">x${item.quantity}</div>
+
+                <button 
+                    class="sell-btn" 
+                    data-ingredient-id="${ingId}">
+                    SELL
+                </button>
+            </div>
+        `;
     }
 
     grid.innerHTML = html;
+}
+
+function bindSellButtons() {
+    var grid = $("inventoryGrid");
+    if (!grid) return;
+
+    if (grid.dataset.sellBound === "true") return;
+    grid.dataset.sellBound = "true";
+
+    grid.addEventListener("click", function (e) {
+        var btn = e.target;
+        if (!btn.classList.contains("sell-btn")) return;
+
+        var ingredientId = btn.getAttribute("data-ingredient-id");
+        if (!ingredientId) return;
+
+        sellIngredient(ingredientId, btn);
+    });
+}
+
+function sellIngredient(ingredientId, buttonEl) {
+    var token = getTokenOrRedirect();
+    if (!token) return;
+
+    buttonEl.disabled = true;
+    buttonEl.textContent = "SELLING...";
+
+    fetchMethod(
+        currentUrl + "/api/me/inventory/" + ingredientId,
+        function (status, res) {
+            if (status === 200) {
+                showStatusModal(
+                    "success",
+                    res && res.message ? res.message : "Ingredient sold!"
+                );
+
+                // Refresh inventory + recipes
+                loadAll();
+                return;
+            }
+
+            buttonEl.disabled = false;
+            buttonEl.textContent = "SELL";
+
+            showStatusModal(
+                "error",
+                res && res.message ? res.message : ("Sell failed (HTTP " + status + ")")
+            );
+        },
+        "DELETE",
+        null,
+        token
+    );
 }
 
 // ------------------------------
@@ -439,5 +499,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setupLogout();
     setupModalButtons();
+
+    // load everything and render
     loadAll();
 });

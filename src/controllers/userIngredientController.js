@@ -1,7 +1,6 @@
 // Name: Vivian Tan Xiu Li
 // StudentID: 2518268
 // Class: DAAA/FT/1B/06
-
 const userModel = require("../models/userModel");
 const userIngredientModel = require("../models/userIngredientModel");
 
@@ -84,4 +83,43 @@ module.exports.readInventoryByUser = (req, res, next) => {
     };
 
     userIngredientModel.selectInventoryByUser(data, callback);
+};
+
+module.exports.sellOneIngredient = (req, res, next) => {
+    const userId = res.locals.userId;
+    const ingredientId = parseInt(req.params.ingredient_id, 10);
+
+    if (!userId || isNaN(ingredientId)) {
+        return res.status(400).json({ message: "Missing required data" });
+    }
+
+    const data = {
+        user_id: userId,
+        ingredient_id: ingredientId
+    };
+
+    const callback = (err, result) => {
+        if (err) {
+            console.error("sellOneIngredient error:", err);
+
+            if (err.code === "NO_INGREDIENT") {
+                return res.status(404).json({ message: "Ingredient not found" });
+            }
+            if (err.code === "NOT_OWNED") {
+                return res.status(400).json({ message: "You don't have this ingredient to sell" });
+            }
+
+            return res.status(500).json({ message: "Internal server error" });
+        }
+
+        res.locals.data = {
+            ingredient_id: ingredientId,
+            refunded_points: result.refunded_points,
+            new_quantity: result.new_quantity
+        };
+
+        next();
+    };
+
+    userIngredientModel.sellOneIngredient(data, callback);
 };

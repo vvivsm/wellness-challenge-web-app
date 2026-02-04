@@ -33,6 +33,14 @@ router.get('/inventory',
     sendResponse()
 );
 
+//Sell an ingredient 
+router.delete('/inventory/:ingredient_id',
+    jwtMiddleware.verifyToken,
+    userIngredientController.sellOneIngredient,
+    attachMessage("Ingredient sold successfully", 200),
+    sendResponse()
+);
+
 //Craft a recipe
 router.post('/recipes/:recipe_id/craft',
     jwtMiddleware.verifyToken,
