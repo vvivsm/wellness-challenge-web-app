@@ -5,14 +5,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wellness Quest - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/index.css" />
 </head>
 
 <body>
-    
-    <div id="navbarMount"></div>
+
+    <div id="navbar-root"></div>
 
     <!-- Header -->
     <div class="page-header">
@@ -35,85 +37,85 @@
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-container">
+    <div class="container-xxl px-3 px-md-4">
+        <!-- Main Content -->
+        <div class="main-container">
 
-        <!-- Player Stats Panel -->
-        <div class="stats-panel">
-            <h2 class="panel-title">INVENTORY</h2>
+            <!-- Player Stats Panel -->
+            <div class="stats-panel">
+                <h2 class="panel-title">INVENTORY</h2>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon gold-icon"></div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="playerPoints">0</div>
-                        <div class="stat-label">POINTS</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon gold-icon"></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="playerPoints">0</div>
+                            <div class="stat-label">POINTS</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon emerald-icon"></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="completedChallenges">0</div>
+                            <div class="stat-label">CHALLENGES (TODAY)</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon diamond-icon"></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="craftedSoups">0</div>
+                            <div class="stat-label">SOUPS CRAFTED</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon chest-icon"></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="ingredientsOwned">0</div>
+                            <div class="stat-label">INGREDIENTS</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-icon emerald-icon"></div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="completedChallenges">0</div>
-                        <div class="stat-label">CHALLENGES (TODAY)</div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon diamond-icon"></div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="craftedSoups">0</div>
-                        <div class="stat-label">SOUPS CRAFTED</div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon chest-icon"></div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="ingredientsOwned">0</div>
-                        <div class="stat-label">INGREDIENTS</div>
-                    </div>
-                </div>
             </div>
 
-        </div>
+            <!-- Crafted Recipes -->
+            <div class="crafted-section">
+                <h2 class="section-title">CRAFTED RECIPES</h2>
 
-        <!-- Crafted Recipes -->
-        <div class="crafted-section">
-            <h2 class="section-title">CRAFTED RECIPES</h2>
-
-            <div id="craftedEmpty" class="crafted-empty" style="display:none;">
-                No crafted recipes yet. Go craft your first soup!
-            </div>
-
-            <div id="craftedGrid" class="crafted-grid"></div>
-        </div>
-
-        <!-- Update Username -->
-        <div class="update-section">
-            <h2 class="section-title">UPDATE USERNAME</h2>
-
-            <div class="update-box">
-                <div class="update-row">
-                    <label class="update-label" for="newUsernameInput">NEW USERNAME</label>
-                    <input id="newUsernameInput" class="update-input" type="text" maxlength="30"
-                        placeholder="Enter new username..." />
+                <div id="craftedEmpty" class="crafted-empty" style="display:none;">
+                    No crafted recipes yet. Go craft your first soup!
                 </div>
 
-                <div id="updateUsernameError" class="update-message error" style="display:none;"></div>
-                <div id="updateUsernameSuccess" class="update-message success" style="display:none;"></div>
+                <div id="craftedGrid" class="crafted-grid"></div>
+            </div>
 
-                <button id="updateUsernameBtn" class="update-btn">UPDATE</button>
+            <!-- Update Username -->
+            <div class="update-section">
+                <h2 class="section-title">UPDATE USERNAME</h2>
+
+                <div class="update-box">
+                    <div class="update-row">
+                        <label class="update-label" for="newUsernameInput">NEW USERNAME</label>
+                        <input id="newUsernameInput" class="update-input" type="text" maxlength="30"
+                            placeholder="Enter new username..." />
+                    </div>
+
+                    <div id="updateUsernameError" class="update-message error" style="display:none;"></div>
+                    <div id="updateUsernameSuccess" class="update-message success" style="display:none;"></div>
+
+                    <button id="updateUsernameBtn" class="update-btn">UPDATE</button>
+                </div>
             </div>
         </div>
-
     </div>
 
     <div id="footerMount"></div>
 
-    <!-- IMPORTANT: load fetchMethod + currentUrl BEFORE index.js -->
-    <script src="js/queryCmds.js" type="text/javascript"></script>
     <script src="js/getCurrentURL.js" type="text/javascript"></script>
+    <script src="js/queryCmds.js" type="text/javascript"></script>
     <script src="js/navbar.js"></script>
     <script src="js/index.js"></script>
 </body>

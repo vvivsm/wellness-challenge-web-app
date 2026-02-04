@@ -15,7 +15,7 @@
 
 <body>
 
-    <div id="navbarMount"></div>
+    <div id="navbar-root"></div>
 
     <!-- Header -->
     <div class="page-header">
@@ -35,120 +35,147 @@
         </div>
     </div>
 
-    <!-- Create Challenge -->
-    <div class="create-challenge-wrap">
-        <div class="create-challenge-panel">
-            <h2 class="section-title">
-                <span class="title-badge daily">✨ CREATE YOUR OWN CHALLENGE ✨</span>
-            </h2>
+    <div class="container-xxl px-3 px-md-4">
 
-            <form id="createChallengeForm" class="create-challenge-form">
-                <div class="row g-3">
-                    <div class="col-12">
-                        <label class="form-label pixel-label" for="newChallengeDesc">DESCRIPTION</label>
-                        <input type="text" id="newChallengeDesc" class="form-control pixel-input"
-                            placeholder="E.g. Take a 10-min walk" maxlength="255" required />
+        <!-- Create Challenge -->
+        <div class="create-challenge-wrap">
+            <div class="create-challenge-panel">
+                <h2 class="section-title">
+                    <span class="title-badge daily">✨ CREATE YOUR OWN CHALLENGE ✨</span>
+                </h2>
+
+                <form id="createChallengeForm" class="create-challenge-form">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label pixel-label" for="newChallengeDesc">DESCRIPTION</label>
+                            <input type="text" id="newChallengeDesc" class="form-control pixel-input"
+                                placeholder="E.g. Take a 10-min walk" maxlength="255" required />
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label pixel-label" for="newChallengePoints">POINTS</label>
+                            <input type="number" id="newChallengePoints" class="form-control pixel-input" min="1"
+                                max="999" value="5" required />
+                        </div>
+
+                        <div class="col-12 col-md-8">
+                            <label class="form-label pixel-label" for="newChallengeType">TYPE</label>
+                            <select id="newChallengeType" class="form-select pixel-input" required>
+                                <option value="sleep">SLEEP</option>
+                                <option value="physical">PHYSICAL</option>
+                                <option value="mental">MENTAL</option>
+                                <option value="social">SOCIAL</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" id="createChallengeBtn" class="challenge-btn start-btn">
+                                CREATE CHALLENGE
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="col-12 col-md-4">
-                        <label class="form-label pixel-label" for="newChallengePoints">POINTS</label>
-                        <input type="number" id="newChallengePoints" class="form-control pixel-input" min="1" max="999"
-                            value="5" required />
+                    <div id="createChallengeError" class="create-challenge-error" style="display:none;"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-container">
+            <!-- Sleep Challenges -->
+            <div class="challenges-section" data-category="sleep">
+                <h2 class="section-title">
+                    <span class="title-badge sleep">😴 SLEEP CHALLENGES 😴</span>
+                </h2>
+                <div class="challenges-grid" id="grid-sleep"></div>
+            </div>
+
+            <!-- Physical Challenges -->
+            <div class="challenges-section" data-category="physical">
+                <h2 class="section-title">
+                    <span class="title-badge physical">💪 PHYSICAL CHALLENGES 💪</span>
+                </h2>
+                <div class="challenges-grid" id="grid-physical"></div>
+            </div>
+
+            <!-- Mental Challenges -->
+            <div class="challenges-section" data-category="mental">
+                <h2 class="section-title">
+                    <span class="title-badge mental">🧠 MENTAL CHALLENGES 🧠</span>
+                </h2>
+                <div class="challenges-grid" id="grid-mental"></div>
+            </div>
+
+            <!-- Social Challenges -->
+            <div class="challenges-section" data-category="social">
+                <h2 class="section-title">
+                    <span class="title-badge social">💬 SOCIAL CHALLENGES 💬</span>
+                </h2>
+                <div class="challenges-grid" id="grid-social"></div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="completionModal" tabindex="-1" aria-labelledby="completionModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content"
+                    style="background:#111; border:2px solid #39ff14; color:#fff; font-family:'Press Start 2P', cursive;">
+                    <div class="modal-header" style="border-bottom:1px solid #333;">
+                        <h5 class="modal-title" id="completionModalLabel" style="font-size:12px;">ADD COMPLETION DETAILS
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
-                    <div class="col-12 col-md-8">
-                        <label class="form-label pixel-label" for="newChallengeType">TYPE</label>
-                        <select id="newChallengeType" class="form-select pixel-input" required>
-                            <option value="sleep">SLEEP</option>
-                            <option value="physical">PHYSICAL</option>
-                            <option value="mental">MENTAL</option>
-                            <option value="social">SOCIAL</option>
-                        </select>
+                    <div class="modal-body">
+                        <p style="font-size:10px; line-height:1.6;">
+                            What did you do to complete this challenge?
+                        </p>
+
+                        <textarea id="completionDetails" class="form-control" rows="4"
+                            placeholder="Type your details here..."
+                            style="background:#000; color:#fff; border:1px solid #39ff14; font-size:10px;"></textarea>
+
+                        <!-- store challenge id -->
+                        <input type="hidden" id="completionChallengeId" value="">
                     </div>
 
-                    <div class="col-12">
-                        <button type="submit" id="createChallengeBtn" class="challenge-btn start-btn">
-                            CREATE CHALLENGE
+                    <div class="modal-footer" style="border-top:1px solid #333;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            style="font-size:10px; font-family:'Press Start 2P', cursive;">
+                            CANCEL
+                        </button>
+                        <button type="button" class="btn btn-success" id="submitCompletion"
+                            style="font-size:10px; font-family:'Press Start 2P', cursive;">
+                            SUBMIT
                         </button>
                     </div>
                 </div>
-
-                <div id="createChallengeError" class="create-challenge-error" style="display:none;"></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-container">
-        <!-- Sleep Challenges -->
-        <div class="challenges-section" data-category="sleep">
-            <h2 class="section-title">
-                <span class="title-badge sleep">😴 SLEEP CHALLENGES 😴</span>
-            </h2>
-            <div class="challenges-grid" id="grid-sleep"></div>
+            </div>
         </div>
 
-        <!-- Physical Challenges -->
-        <div class="challenges-section" data-category="physical">
-            <h2 class="section-title">
-                <span class="title-badge physical">💪 PHYSICAL CHALLENGES 💪</span>
-            </h2>
-            <div class="challenges-grid" id="grid-physical"></div>
-        </div>
+        <!-- SUCCESS MODAL -->
+        <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content"
+                    style="background:#111; border:2px solid #17DD62; color:#fff; font-family:'Press Start 2P', cursive;">
 
-        <!-- Mental Challenges -->
-        <div class="challenges-section" data-category="mental">
-            <h2 class="section-title">
-                <span class="title-badge mental">🧠 MENTAL CHALLENGES 🧠</span>
-            </h2>
-            <div class="challenges-grid" id="grid-mental"></div>
-        </div>
+                    <div class="modal-header" style="border-bottom:1px solid #333;">
+                        <h5 class="modal-title" style="font-size:12px;">SUCCESS</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
 
-        <!-- Social Challenges -->
-        <div class="challenges-section" data-category="social">
-            <h2 class="section-title">
-                <span class="title-badge social">💬 SOCIAL CHALLENGES 💬</span>
-            </h2>
-            <div class="challenges-grid" id="grid-social"></div>
-        </div>
-    </div>
+                    <div class="modal-body" style="font-size:10px; line-height:1.8;">
+                        <div id="successModalMessage">Nice work!</div>
+                    </div>
 
-    <div id="footerMount"></div>
-
-    <div class="modal fade" id="completionModal" tabindex="-1" aria-labelledby="completionModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content"
-                style="background:#111; border:2px solid #39ff14; color:#fff; font-family:'Press Start 2P', cursive;">
-                <div class="modal-header" style="border-bottom:1px solid #333;">
-                    <h5 class="modal-title" id="completionModalLabel" style="font-size:12px;">ADD COMPLETION DETAILS
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <p style="font-size:10px; line-height:1.6;">
-                        What did you do to complete this challenge?
-                    </p>
-
-                    <textarea id="completionDetails" class="form-control" rows="4"
-                        placeholder="Type your details here..."
-                        style="background:#000; color:#fff; border:1px solid #39ff14; font-size:10px;"></textarea>
-
-                    <!-- store challenge id -->
-                    <input type="hidden" id="completionChallengeId" value="">
-                </div>
-
-                <div class="modal-footer" style="border-top:1px solid #333;">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        style="font-size:10px; font-family:'Press Start 2P', cursive;">
-                        CANCEL
-                    </button>
-                    <button type="button" class="btn btn-success" id="submitCompletion"
-                        style="font-size:10px; font-family:'Press Start 2P', cursive;">
-                        SUBMIT
-                    </button>
+                    <div class="modal-footer" style="border-top:1px solid #333;">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                            style="font-size:10px; font-family:'Press Start 2P', cursive;">
+                            OK
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -156,8 +183,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
-    <script src="js/queryCmds.js" type="text/javascript"></script>
     <script src="js/getCurrentURL.js" type="text/javascript"></script>
+    <script src="js/queryCmds.js" type="text/javascript"></script>
     <script src="js/navbar.js"></script>
     <script src="js/challenges.js"></script>
 </body>

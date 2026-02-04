@@ -33,23 +33,6 @@ router.get('/:id',
     sendResponse()
 )
 
-//Q7
-router.delete('/:id',
-    challengeController.deleteChallengeById,
-    challengeController.deleteCompletedChallengeById,
-    sendResponse()
-);
-
-//Q8
-router.put('/:id',
-    validateBody('user_id', 'description', 'points', 'type'),
-    challengeController.requireMatchingCreatorId,
-    challengeController.updateChallengeById,
-    challengeController.readChallengeById,
-    attachMessage("Challenge updated successfully", 200),
-    sendResponse()
-);
-
 //Q9
 router.post('/:id',
     jwtMiddleware.verifyToken,

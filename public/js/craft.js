@@ -27,10 +27,10 @@ function showStatusModal(type, message) {
     box.classList.remove("error");
 
     if (type === "error") {
-        title.textContent = "CRAFT FAILED";
+        title.textContent = "FAILED";
         box.classList.add("error");
     } else {
-        title.textContent = "CRAFT SUCCESS";
+        title.textContent = "SUCCESS";
     }
 
     msg.textContent = message || "";
@@ -98,7 +98,7 @@ function getTokenOrRedirect() {
 // Icons (visual only)
 // ------------------------------
 var INGREDIENT_ICONS = {
-    "Chamomile Petals": "🫖",
+    "Chamomile Petals": "🌸",
     "Lavender Buds": "🪻",
     "Warm Almond Milk": "🥛",
     "Lean Chicken": "🍗",

@@ -54,28 +54,13 @@ router.post('/recipes/:recipe_id/craft',
     sendResponse()
 );
 
+//Get all crafted soups
 router.get('/crafted',
     jwtMiddleware.verifyToken,
     userCraftedRecipeController.readCraftedByUser,
     attachMessage("Crafted recipes retrieved successfully", 200),
     sendResponse()
 );
-
-// //Q1
-// router.post('/',
-//     validateBody('username'),
-//     userController.requireUniqueUsername,
-//     userController.createUser,
-//     userController.readUserById,
-//     attachMessage("User created successfully", 201),
-//     sendResponse()
-// );
-
-// //Q2
-// router.get('/',
-//     userController.readAllUser,
-//     sendResponse()
-// );
 
 //Q3
 router.get('/',

@@ -21,5 +21,4 @@ router.get('/:recipe_id/requirements',
     sendResponse()
 );
 
-
 module.exports = router;

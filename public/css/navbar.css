@@ -2,16 +2,29 @@
    NAVIGATION BAR
 ========================= */
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#navbar-root {
+    margin: 0;
+    padding: 0;
+    height: auto;
+}
+
 /* Navigation Bar */
 .navbar {
     background: var(--panel-bg);
     border-bottom: 4px solid var(--dark-stone);
-    position: fixed;
-    top: 0;
+    position: fixed !important;
+    top: 0 !important;
     left: 0;
     width: 100%;
-    z-index: 1000;
+    margin: 0 !important;
+    z-index: 9999;
     box-shadow: 0 4px 0 2px rgba(0, 0, 0, 0.5);
+
 }
 
 .nav-container {
@@ -93,6 +106,54 @@
 
 .nav-link.logout:hover {
     border-bottom-color: var(--error-red);
+}
+
+@media (max-width: 768px) {
+
+    /* Top row: brand left, hamburger right */
+    .nav-container {
+        position: relative;
+        padding: 14px 16px;
+    }
+
+    /* Make hamburger visible */
+    .nav-toggle {
+        display: block;
+        padding: 8px;
+    }
+
+    .nav-toggle-bar {
+        background: var(--text-white);
+    }
+    
+    .nav-links {
+        display: none !important;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--panel-bg);
+        border-bottom: 4px solid var(--dark-stone);
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 0;
+    }
+
+    .nav-links.open {
+        display: flex !important;
+    }
+
+    .nav-link {
+        width: 100%;
+        padding: 14px 20px;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* Optional: reduce brand size so it fits */
+    .nav-brand {
+        font-size: 10px;
+        gap: 10px;
+    }
 }
 
 /* =========================

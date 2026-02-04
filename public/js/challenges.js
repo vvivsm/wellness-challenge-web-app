@@ -257,6 +257,9 @@ function submitCompletion() {
             // close modal
             if (completionModalInstance) completionModalInstance.hide();
 
+            // show success modal
+            openSuccessModal("You earned +" + getPointsFromCard(pendingButton) + " points!");
+
             if (pendingButton) {
                 const card = pendingButton.closest(".challenge-card");
                 if (card) card.classList.add("completed");
@@ -279,7 +282,6 @@ function submitCompletion() {
             updateCompletedCount();
             recordCompletion(userId, challengeId);
             applyCompletionStateToUI(userId);
-            showNotification("Challenge completed!", "success");
             return;
         }
 
@@ -461,9 +463,6 @@ function createChallenge() {
         btnEl.textContent = "CREATE CHALLENGE";
 
         if (status === 201 && data) {
-            // Your sendResponse wrapper might be:
-            // { message: "...", data: { id, description, points, type } }
-            // or { challenge: {...} } etc.
             const created = data.data || data.challenge || data;
 
             if (!created || typeof created.id === "undefined") {
@@ -479,6 +478,7 @@ function createChallenge() {
             ptsEl.value = 5;
             typeEl.value = "sleep";
 
+            openSuccessModal("Challenge created successfully!");
             showNotification("Challenge created!", "success");
             return;
         }
@@ -492,6 +492,15 @@ function createChallenge() {
     fetchMethod(currentUrl + "/api/challenges", callback, "POST", postData, token);
 }
 
+function openSuccessModal(message) {
+    var el = document.getElementById("successModal");
+    var msgEl = document.getElementById("successModalMessage");
+    if (!el) return;
+
+    if (msgEl) msgEl.textContent = message;
+    var inst = bootstrap.Modal.getOrCreateInstance(el);
+    inst.show();
+}
 
 // ---------------- Events ----------------
 document.addEventListener("DOMContentLoaded", function () {
