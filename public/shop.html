@@ -8,28 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/shop.css">
 </head>
 
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <div class="soup-logo">
-                    <div class="mini-bowl"></div>
-                </div>
-                <span>WELLNESS QUEST</span>
-            </div>
-            <div class="nav-links">
-                <a href="index.html" class="nav-link">HOME</a>
-                <a href="challenges.html" class="nav-link">CHALLENGES</a>
-                <a href="shop.html" class="nav-link active">SHOP</a>
-                <a href="craft.html" class="nav-link">CRAFTING</a>
-                <a href="login.html" class="nav-link logout" id="logoutBtn">LOGOUT</a>
-            </div>
-        </div>
-    </nav>
+
+    <div id="navbarMount"></div>
 
     <!-- Header -->
     <div class="page-header">
@@ -53,10 +38,7 @@
         <!-- Sections will be injected by shop.js -->
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>© 2024 WELLNESS QUEST - STAY HEALTHY, STAY STRONG!</p>
-    </footer>
+    <div id="footerMount"></div>
 
     <!-- Status Modal -->
     <div id="statusModal" class="status-modal" style="display:none;">
@@ -76,6 +58,7 @@
     <script src="js/queryCmds.js" type="text/javascript"></script>
     <script src="js/getCurrentURL.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/navbar.js"></script>
     <script src="js/shop.js"></script>
 </body>
 
