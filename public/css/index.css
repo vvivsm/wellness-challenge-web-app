@@ -445,50 +445,200 @@ body {
     font-weight: bold;
 }
 
-/* Achievements */
-.achievements-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
+/* Welcome + Daily Quest in Header */
+.welcome-line {
+    margin-top: 18px;
+    font-size: 12px;
+    color: var(--gold);
+    text-shadow: 3px 3px 0 var(--text-shadow);
 }
 
-.achievement-card {
-    background: rgba(0, 0, 0, 0.5);
-    border: 3px solid var(--dark-stone);
-    padding: 20px;
-    text-align: center;
-    transition: all 0.2s;
+.daily-quest-mini {
+    margin-top: 18px;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 18px;
+    border: 3px solid #b65197;
+    background: rgba(0, 0, 0, 0.35);
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.6);
 }
 
-.achievement-card.unlocked {
-    border-color: var(--gold);
-    background: linear-gradient(135deg, rgba(255, 170, 0, 0.1) 0%, rgba(204, 136, 0, 0.1) 100%);
+.dq-title {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 12px;
+    line-height: 1.6;
 }
 
-.achievement-card.unlocked:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
-}
-
-.achievement-card.locked {
-    opacity: 0.5;
-}
-
-.achievement-badge {
-    font-size: 32px;
+.dq-progress-bar {
+    position: relative;
+    height: 26px;
+    border: 2px solid var(--dark-stone);
+    background: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
     margin-bottom: 10px;
 }
 
-.achievement-name {
-    font-size: 10px;
-    color: var(--gold);
-    margin-bottom: 8px;
+.dq-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--grass-green) 0%, var(--emerald) 100%);
+    transition: width 0.25s ease;
+    box-shadow: inset 0 -3px 0 1px rgba(0, 0, 0, 0.3);
+}
+
+.dq-progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 9px;
+    color: var(--text-white);
     text-shadow: 2px 2px 0 var(--text-shadow);
 }
 
-.achievement-desc {
-    font-size: 7px;
+.dq-status {
+    font-size: 9px;
+    color: var(--gold);
+    text-shadow: 2px 2px 0 var(--text-shadow);
+}
+
+/* Crafted Recipes */
+.crafted-section {
+    background: var(--panel-bg);
+    border: 4px solid var(--dark-stone);
+    padding: 30px;
+    box-shadow:
+        inset 0 0 0 2px #000000,
+        inset 0 0 0 4px #5A5A5A,
+        0 6px 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.crafted-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+}
+
+.crafted-card {
+    background: rgba(0, 0, 0, 0.5);
+    border: 3px solid var(--stone-gray);
+    padding: 18px;
+    transition: all 0.2s;
+}
+
+.crafted-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.crafted-title {
+    font-size: 10px;
+    color: var(--gold);
+    text-shadow: 2px 2px 0 var(--text-shadow);
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.crafted-meta {
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.6;
+}
+
+.crafted-empty {
+    font-size: 9px;
     color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    line-height: 1.6;
+    padding: 10px 0;
+}
+
+/* Update Username Section */
+.update-section {
+    background: var(--panel-bg);
+    border: 4px solid var(--dark-stone);
+    padding: 30px;
+    box-shadow:
+        inset 0 0 0 2px #000000,
+        inset 0 0 0 4px #5A5A5A,
+        0 6px 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.update-box {
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.45);
+    border: 3px solid var(--stone-gray);
+    padding: 20px;
+}
+
+.update-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.update-label {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.update-input {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid var(--dark-stone);
+    color: var(--text-white);
+    outline: none;
+}
+
+.update-input:focus {
+    border-color: var(--gold);
+}
+
+.update-btn {
+    width: 100%;
+    padding: 14px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    border: 3px solid var(--dark-grass);
+    cursor: pointer;
+    color: var(--text-white);
+    background: linear-gradient(180deg, var(--grass-green) 0%, var(--dark-grass) 100%);
+    box-shadow:
+        inset 0 0 0 2px rgba(255, 255, 255, 0.2),
+        0 4px 0 2px rgba(0, 0, 0, 0.4);
+}
+
+.update-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.update-message {
+    font-size: 9px;
+    line-height: 1.6;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 2px solid;
+    display: none;
+}
+
+.update-message.error {
+    border-color: var(--error-red);
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 85, 85, 0.12);
+}
+
+.update-message.success {
+    border-color: var(--success-green);
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(85, 255, 85, 0.10);
 }
 
 /* Footer */

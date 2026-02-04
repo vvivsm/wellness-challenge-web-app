@@ -34,24 +34,26 @@ module.exports.selectById = (data, callback) => {
     pool.query(SQLSTATEMENT, VALUES, callback);
 }
 
-module.exports.selectByUsername = (data, callback) => {
-    const SQLSTATEMENT = `
-        SELECT * FROM Users
-        WHERE username = ?;
+module.exports.selectByUsernameExcludingUser = (data, callback) => {
+    const SQL = `
+        SELECT id
+        FROM Users
+        WHERE username = ?
+          AND id <> ?
+        LIMIT 1
     `;
+    const VALUES = [data.username, data.user_id];
 
-    const VALUES = [data.username]
-
-    pool.query(SQLSTATEMENT, VALUES, callback);
-}
+    pool.query(SQL, VALUES, callback);
+};
 
 module.exports.updateById = (data, callback) => {
     const SQLSTATEMENT = `
         UPDATE Users
-        SET username = ?, points = ?
+        SET username = ? 
         WHERE id = ?;
     `;
-    pool.query(SQLSTATEMENT, [data.username, data.points, data.id], callback);
+    pool.query(SQLSTATEMENT, [data.username, data.id], callback);
 };
 
 module.exports.addPoints = (data, callback) => {

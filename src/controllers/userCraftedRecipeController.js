@@ -41,14 +41,9 @@ module.exports.checkNotCraftedBefore = (req, res, next) => {
 // GET list of crafted recipes for UI
 module.exports.readCraftedByUser = (req, res, next) => {
     const tokenUserId = res.locals.userId;
-    const paramUserId = res.locals.userId;
 
-    if (!tokenUserId || !paramUserId) {
+    if (!tokenUserId) {
         return res.status(400).json({ message: "Missing required data" });
-    }
-
-    if (parseInt(paramUserId) !== parseInt(tokenUserId)) {
-        return res.status(401).json({ message: "User mismatch" });
     }
 
     const data = { user_id: tokenUserId };
@@ -65,3 +60,4 @@ module.exports.readCraftedByUser = (req, res, next) => {
 
     userCraftedRecipeModel.selectCraftedByUser(data, callback);
 };
+

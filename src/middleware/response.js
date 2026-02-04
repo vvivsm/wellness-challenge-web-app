@@ -22,4 +22,3 @@ module.exports.sendResponse = () =>(req,res) => {
 
     res.status(status).json({message, data})
 }
-

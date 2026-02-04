@@ -48,13 +48,20 @@ module.exports.readUserById = (req, res, next) => {
 
 //Q1, Q4
 module.exports.requireUniqueUsername = (req, res, next) => {
+    const newUsername = req.body.username;
+
+    if (!newUsername) {
+        return res.status(400).json({ message: "Missing required data" });
+    }
+
     const data = {
-        username: req.body.username || res.locals.username
+        username: newUsername,
+        user_id: res.locals.userId
     };
 
     const callback = (error, results) => {
         if (error) {
-            console.error(error);
+            console.error("requireUniqueUsername error:", error);
             return res.status(500).json({ message: "Internal server error" });
         }
 
@@ -65,7 +72,7 @@ module.exports.requireUniqueUsername = (req, res, next) => {
         next();
     };
 
-    model.selectByUsername(data, callback);
+    model.selectByUsernameExcludingUser(data, callback);
 };
 
 //Q2
@@ -92,8 +99,7 @@ module.exports.readAllUser = (req, res, next) => {
 module.exports.updateUserById = (req, res, next) => {
     const data = {
         id: res.locals.userId,
-        username: req.body.username,
-        points: req.body.points
+        username: req.body.username
     };
 
     const callback = (error, results) => {

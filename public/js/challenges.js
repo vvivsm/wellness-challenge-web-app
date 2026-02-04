@@ -121,7 +121,6 @@ function makeChallengeCard(ch) {
         "</div>" +
         '<div class="challenge-icon">' + icon + "</div>" +
         '<h3 class="challenge-title">' + title + "</h3>" +
-        '<p class="challenge-description">' + (ch.description || "") + "</p>" +
         '<div class="challenge-reward">' +
         '<span class="reward-icon">💰</span>' +
         '<span class="reward-value">+' + ch.points + " POINTS</span>" +

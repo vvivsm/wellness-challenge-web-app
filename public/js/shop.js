@@ -3,13 +3,12 @@
 // ------------------------------
 var BASE_URL = "http://localhost:3000"; // Live Server needs this
 var INGREDIENTS_ENDPOINT = "/api/ingredients"; // list all ingredients
-var BUY_PREFIX = "/api/users/"; // + userId + "/ingredients/" + ingredientId + "/buy"
 
 // ------------------------------
 // ICONS
 // ------------------------------
 var INGREDIENT_ICONS = {
-    "Chamomile Petals": "🫖",
+    "Chamomile Petals": "🌸",
     "Lavender Buds": "🪻",
     "Warm Almond Milk": "🥛",
 
@@ -269,7 +268,7 @@ function buyIngredient(ingredientId, buttonEl) {
         buttonEl.textContent = "BUYING...";
     }
 
-    var url = BASE_URL + BUY_PREFIX + userId + "/ingredients/" + ingredientId + "/buy";
+    var url = BASE_URL + "/api/me/ingredients/" + ingredientId + "/buy";
 
     fetchMethod(url, function (status, res) {
 
@@ -292,7 +291,7 @@ function buyIngredient(ingredientId, buttonEl) {
             }
             return; // IMPORTANT: stop here so it won't show error modal
         }
-        
+
         // Unauthorized
         if (status === 401 || status === 403) {
             showStatusModal("error", (res && res.message) ? res.message : "Unauthorized. Please login again.");
