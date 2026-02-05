@@ -1,141 +1,103 @@
-# BED CA1 – Backend API (Express + MySQL)
+# 🥣 Wellness Quest – Backend Web Development CA2
 
-This project is a **RESTful backend API** developed for **BED CA1** using **Node.js, Express, and MySQL**.  
-It implements a **gamified wellness system** where users can earn points, complete challenges, purchase ingredients, manage inventory, and craft recipes.
+## Module
+**ST0503 – Backend Web Development**  
+**Academic Year:** 2025 / 2026 Semester 2  
+**Assignment:** CA2 (Individual)
 
-The application is built with a **modular MVC-based architecture**, uses middleware for validation and business logic, and is tested using **Postman**.
+---
 
-## Project Structure
-```
-BED-CA1-VIVSM-SP/
-│
-├── src/
-│ ├── configs/
-│ │ ├── createSchema.js # Database schema creation
-│ │ └── initTables.js # Table initialization & seed data
-│ │
-│ ├── controllers/ # Request handling & control flow
-│ │ ├── challengeController.js
-│ │ ├── completionController.js
-│ │ ├── craftController.js
-│ │ ├── ingredientController.js
-│ │ ├── recipeController.js
-│ │ ├── userController.js
-│ │ └── userIngredientController.js
-│ │
-│ ├── middleware/ # Reusable middleware logic
-│ │ ├── request.js # Request validation
-│ │ └── response.js # Standardised responses
-│ │
-│ ├── models/ # Database queries (SQL)
-│ │ ├── challengeModel.js
-│ │ ├── completionModel.js
-│ │ ├── ingredientModel.js
-│ │ ├── recipeModel.js
-│ │ ├── userCraftedRecipeModel.js
-│ │ ├── userIngredientModel.js
-│ │ └── userModel.js
-│ │
-│ ├── routes/ # API endpoint definitions
-│ │ ├── challengeRoutes.js
-│ │ ├── ingredientRoutes.js
-│ │ ├── recipeRoutes.js
-│ │ ├── userRoutes.js
-│ │ └── mainRoutes.js
-│ │
-│ ├── services/
-│ │ └── app.js # Express app & middleware setup
-│
-├── .env # Environment variables
-├── index.js # Application entry point
-├── package.json
-├── package-lock.json
-└── README.md
-```
+## 📌 Project Overview
 
-## Architecture Overview
+**Wellness Quest** is a gamified wellness challenge web application built on top of the CA1 backend server.  
+Users can register, log in securely, complete wellness challenges, earn points, and interact with gamification features such as crafting, inventory, and rewards.
 
-The project follows a **Model–Controller–Route** design:
+This project focuses on **frontend development and frontend–backend integration**, while enhancing backend security and functionality using **JWT authentication** and **bcrypt password hashing**.
 
-- **Routes** define RESTful endpoints and attach middleware.
-- **Controllers** manage request logic and responses.
-- **Models** handle all database queries (SQL).
-- **Middleware** enforces validation, business rules, and error handling.
-- **Configs** initialize database schema and seed data.
+---
 
-This ensures **clear separation of concerns**, **code reusability**, and **easy maintenance**.
+## 🎯 Project Objectives
 
-## Technologies Used
+- Build a responsive frontend website that integrates with an existing Node.js + MySQL backend
+- Implement secure authentication using JWT and bcrypt
+- Allow users to complete wellness challenges and earn points
+- Display and update user progress dynamically
+- Support gamification features such as crafting, inventory, and rewards
+- Apply proper modular coding practices and version control
 
-- Node.js
-- Express.js
-- MySQL
-- mysql2
-- Postman (API testing)
+---
 
-## API Design
+## 🛠️ Tech Stack
 
-The API follows RESTful conventions with consistent URL patterns and HTTP methods.
+### Frontend
+- HTML5  
+- CSS3  
+- JavaScript (Vanilla JS)  
+- Bootstrap  
+- Fetch API  
 
-### Example Endpoints
+### Backend
+- Node.js  
+- Express.js  
+- MySQL  
+- JSON Web Token (JWT)  
+- bcrypt  
 
-| Method | Endpoint | Description |
-|------|---------|-------------|
-| GET | `/users` | Retrieve all users |
-| GET | `/users/:user_id/inventory` | Get user inventory |
-| POST | `/users/:user_id/ingredients/:ingredient_id/buy` | Purchase ingredient |
-| GET | `/ingredients` | Retrieve ingredients |
-| GET | `/recipes` | Retrieve recipes |
-| POST | `/recipes/craft` | Craft a recipe |
-| GET | `/challenges` | Retrieve challenges |
+### Tools
+- Git & GitHub Classroom  
+- MySQL Workbench  
+- Visual Studio Code  
 
-Responses are returned in **JSON format** with appropriate HTTP status codes.
+---
 
-## Middleware Usage
+## 🔐 Key Features
 
-Middleware is used to:
-- Validate request data
-- Check resource existence (users, ingredients, recipes)
-- Enforce business rules (e.g. sufficient points)
-- Standardise API responses
-- Reduce code duplication
+### 1. User Authentication
+- User registration and login
+- Password hashing using **bcrypt**
+- Secure session handling using **JWT**
+- Token stored in `localStorage` for authenticated requests
 
-Middleware chaining enables clean workflows such as:
-Validate request → Check user → Check ingredient → Deduct points → Update inventory
+### 2. Wellness Challenges
+- View available challenges
+- Complete challenges
+- Prevent multiple completions
+- Earn points upon successful completion
 
-## Database Design
+### 3. Points & Gamification
+- Dynamic points system
+- Points displayed in the navigation bar
+- Points used for crafting or unlocking features
+- Inventory system for ingredients and crafted items
 
-- Normalised relational database structure
-- Junction tables for many-to-many relationships
-- Efficient JOIN queries for inventory, recipes, and challenges
-- Supports scalable data retrieval and updates
+### 4. Crafting System
+- Users can craft items using ingredients
+- Ingredients are removed from inventory after crafting
+- Crafted items cannot be crafted again
+- Crafted status is visually indicated
 
-## Error Handling
+### 5. Frontend–Backend Integration
+- RESTful API calls using Fetch API
+- JWT included in request headers
+- Real-time UI updates without page reloads
 
-The API uses structured error handling with clear status codes:
+### 6. Error Handling
+- User-friendly error messages
+- Disabled buttons to prevent duplicate requests
+- Graceful handling of invalid or expired tokens
 
-| Status | Scenario |
-|------|---------|
-| 400 | Invalid or missing request data |
-| 403 | Forbidden action (e.g. insufficient points) |
-| 404 | Resource not found |
-| 409 | Conflict |
-| 500 | Internal server error |
+---
 
-Errors are returned as JSON messages for frontend consumption.
+## 📂 Project Structure
 
-## API Testing
 
-All endpoints were tested using **Postman**, including:
-- Successful requests
-- Validation failures
-- Business rule violations
-- Error scenarios
- Postman screenshots are included as part of the CA1 submission.
 
-## Author
+---
 
-Vivian Tan Xiu Li
-2518268
-DAAA/FT/1B/06
-BED CA2 – Backend Development
+## ⚙️ Setup Instructions
+
+### 1. Clone the Repository
+```bash
+git clone <your-github-classroom-repo-url>
+cd project-root
+

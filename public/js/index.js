@@ -3,7 +3,6 @@
 // ------------------------------
 var currentUserId = null; // set after /api/me succeeds (NOT stored in localStorage)
 
-
 // ------------------------------
 // completion state (same scheme as challenges.js)
 // ------------------------------
@@ -316,12 +315,12 @@ function loadCrafted() {
 
 
 // ------------------------------
-// Daily challenge progress (from localStorage)
+// Daily challenge progress 
 // ------------------------------
 
 // loadDailyChallengeProgress()
 // - Reads today's completion progress from localStorage (NOT from backend)
-// - Uses currentUserId from /api/me (NOT from token decoding)
+// - Uses currentUserId from /api/me 
 // - Updates completedChallenges number and the daily quest progress bar
 function loadDailyChallengeProgress() {
     // If we don’t know user yet, show 0 for now

@@ -4,12 +4,9 @@
 var BASE_URL = "http://localhost:3000"; // Base backend URL (needed for Live Server)
 var INGREDIENTS_ENDPOINT = "/api/ingredients"; // Endpoint to list all ingredients
 
-
 // ------------------------------
 // ICONS
 // ------------------------------
-
-// Maps ingredient display names to emoji icons for nicer UI
 var INGREDIENT_ICONS = {
     "Chamomile Petals": "🌸",
     "Lavender Buds": "🪻",
@@ -27,7 +24,6 @@ var INGREDIENT_ICONS = {
     "Golden Sweet Corn": "🌽",
     "Sharing Noodles": "🍜"
 };
-
 
 // ------------------------------
 // Helpers
@@ -267,17 +263,9 @@ function bindBuyButtons() {
 
 
 // ------------------------------
-// BUY (uses fetchMethod)
+// BUY ingredient
 // ------------------------------
 
-// buyIngredient(ingredientId, buttonEl)
-// - Checks user logged in (token exists)
-// - Checks user has enough points (using #playerPoints on the page)
-// - Calls POST /api/me/ingredients/:id/buy with token
-// - On success: shows modal + updates points immediately
-// CA2-safe:
-// ✅ DOES NOT decode token
-// ✅ DOES NOT send userId in request body
 function buyIngredient(ingredientId, buttonEl) {
     hideMessage();
 
@@ -397,14 +385,9 @@ function loadIngredients() {
 
 
 // ------------------------------
-// Load user points (GET /api/me) (uses fetchMethod)
+// Load user points 
 // ------------------------------
 
-// loadUserPoints()
-// - Calls GET /api/me to retrieve the user's current points
-// - Updates #playerPoints textContent
-// CA2-safe:
-// ✅ DOES NOT decode token
 function loadUserPoints() {
     var token = getTokenOrRedirect();
     if (!token) return;

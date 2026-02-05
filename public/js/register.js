@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const errorBox = document.getElementById("errorMessage")
     
     function showError(msg){
-        if(successBox) successBox.ckassList.add("d-none");
+        if(successBox) successBox.classList.add("d-none");
             errorBox.textContent=msg;
             errorBox.classList.remove("d-none")
         
