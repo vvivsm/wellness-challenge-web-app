@@ -179,29 +179,28 @@ BED-CA2/VVIVSM/SP
 ---
 
 ## ⚙️ Setup Instructions
-```
 ### 1. Clone the Repository
 bash git clone <ST0503-BED/bed-ca2-vvivsm-sp>
 cd project-root
 
-## 2. Install Backend Dependencies
+### 2. Install Backend Dependencies
 npm install
 
-## 3. Configure Database
+### 3. Configure Database
 - Create a MySQL database
 - Import the provided SQL schema
 - Update database credentials in the backend configuration file
 
-## 4. Initialise MySQL tables
+### 4. Initialise MySQL tables
 npm run init_tables
 
-## 5. Start the Backend Server
+### 5. Start the Backend Server
 npm start 
 
-## 6. Run the Frontend
+### 6. Run the Frontend
 - Open frontend, http://localhost:3000/login.html
 - Ensure the backend server is running before accessing authenticated features
-```
+- 
 ## 👤 Author
 
 Name: Vivian Tan
