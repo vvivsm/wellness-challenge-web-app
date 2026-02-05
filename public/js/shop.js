@@ -1,12 +1,15 @@
 // ------------------------------
 // CONFIG
 // ------------------------------
-var BASE_URL = "http://localhost:3000"; // Live Server needs this
-var INGREDIENTS_ENDPOINT = "/api/ingredients"; // list all ingredients
+var BASE_URL = "http://localhost:3000"; // Base backend URL (needed for Live Server)
+var INGREDIENTS_ENDPOINT = "/api/ingredients"; // Endpoint to list all ingredients
+
 
 // ------------------------------
 // ICONS
 // ------------------------------
+
+// Maps ingredient display names to emoji icons for nicer UI
 var INGREDIENT_ICONS = {
     "Chamomile Petals": "🌸",
     "Lavender Buds": "🪻",
@@ -25,38 +28,54 @@ var INGREDIENT_ICONS = {
     "Sharing Noodles": "🍜"
 };
 
+
 // ------------------------------
 // Helpers
 // ------------------------------
+
+// Shorthand helper for document.getElementById
 function $(id) {
     return document.getElementById(id);
 }
+
+// showStatusModal(type, message)
+// - Displays a simple modal used after a purchase attempt
+// - type controls styling and title text ("success" or "error")
 function showStatusModal(type, message) {
     // type = "success" | "error"
     var modal = $("statusModal");
     var title = $("statusModalTitle");
     var msg = $("statusModalMessage");
 
+    // If modal DOM isn't present, do nothing
     if (!modal || !title || !msg) return;
 
+    // Clear previous state then add new state class
     modal.classList.remove("success", "error");
     modal.classList.add(type);
 
+    // Set the modal title depending on outcome
     title.textContent = (type === "success")
         ? "PURCHASE SUCCESS"
         : "PURCHASE FAILED";
 
+    // Set message text (fallback to empty)
     msg.textContent = message || "";
 
+    // Show the modal (flex used for centering)
     modal.style.display = "flex";
 }
 
+// closeStatusModal()
+// - Hides the purchase status modal
 function closeStatusModal() {
     var modal = $("statusModal");
     if (modal) modal.style.display = "none";
 }
 
-
+// escapeHtml(str)
+// - Sanitizes text so it’s safe to insert into innerHTML
+// - Prevents HTML injection (e.g., <script> tags) when rendering ingredient names
 function escapeHtml(str) {
     if (str === null || str === undefined) return "";
     return String(str)
@@ -67,6 +86,9 @@ function escapeHtml(str) {
         .replace(/'/g, "&#039;");
 }
 
+// showMessage(text, isError)
+// - Shows a top/bottom message bar on the shop page
+// - isError controls border color styling
 function showMessage(text, isError) {
     var el = $("shopMessage");
     if (!el) return;
@@ -79,6 +101,8 @@ function showMessage(text, isError) {
     el.style.maxWidth = "900px";
 }
 
+// hideMessage()
+// - Hides the shop page message bar and clears its text
 function hideMessage() {
     var el = $("shopMessage");
     if (!el) return;
@@ -86,6 +110,10 @@ function hideMessage() {
     el.textContent = "";
 }
 
+// getTokenOrRedirect()
+// - Reads token from localStorage
+// - If missing, forces user to login
+// - Returns token string or null
 function getTokenOrRedirect() {
     var token = localStorage.getItem("token");
     if (!token) {
@@ -96,6 +124,8 @@ function getTokenOrRedirect() {
     return token;
 }
 
+// setupLogout()
+// - Wires up logout button to clear token and redirect to login
 function setupLogout() {
     var btn = $("logoutBtn");
     if (!btn) return;
@@ -107,36 +137,13 @@ function setupLogout() {
     });
 }
 
-// ------------------------------
-// JWT helpers
-// ------------------------------
-function parseJwt(token) {
-    try {
-        var base64Url = token.split(".")[1];
-        var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        var jsonPayload = decodeURIComponent(
-            atob(base64)
-                .split("")
-                .map(function (c) {
-                    return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-                })
-                .join("")
-        );
-        return JSON.parse(jsonPayload);
-    } catch (e) {
-        return null;
-    }
-}
-
-function getUserIdFromToken(token) {
-    var payload = parseJwt(token);
-    if (!payload) return null;
-    return payload.userId || payload.user_id || payload.id || null;
-}
 
 // ------------------------------
 // Render shop
 // ------------------------------
+
+// typeMeta(type)
+// - Returns display title for each ingredient type category
 function typeMeta(type) {
     var map = {
         sleep: { title: "😴 SLEEP INGREDIENTS 😴" },
@@ -147,6 +154,9 @@ function typeMeta(type) {
     return map[type] || { title: "INGREDIENTS" };
 }
 
+// buildSectionHtml(type, items)
+// - Builds the HTML for one category section (e.g., sleep/mental)
+// - Creates a grid of item cards, each with a BUY button
 function buildSectionHtml(type, items) {
     var meta = typeMeta(type);
     var html = "";
@@ -157,6 +167,7 @@ function buildSectionHtml(type, items) {
     html += "  </h2>";
     html += '  <div class="items-grid">';
 
+    // Build one "item card" per ingredient
     for (var i = 0; i < items.length; i++) {
         var ing = items[i];
         var id = ing.id;
@@ -171,6 +182,7 @@ function buildSectionHtml(type, items) {
         html += '        <span class="price-icon">💰</span>';
         html += '        <span class="price-value">' + cost + "</span>";
         html += "      </div>";
+        // BUY button stores ingredient id and cost using data-* attributes
         html += '      <button class="buy-btn" data-buy-id="' + id + '" data-cost="' + cost + '">BUY</button>';
         html += "    </div>";
     }
@@ -181,10 +193,15 @@ function buildSectionHtml(type, items) {
     return html;
 }
 
+// renderShop(ingredients)
+// - Groups ingredients by type
+// - Builds sections in a fixed order (sleep, physical, mental, social, other)
+// - Inserts HTML into #shopContent and binds BUY button clicks
 function renderShop(ingredients) {
     var container = $("shopContent");
     if (!container) return;
 
+    // Group ingredients by type
     var groups = {};
     for (var i = 0; i < ingredients.length; i++) {
         var t = ingredients[i].type || "other";
@@ -192,9 +209,11 @@ function renderShop(ingredients) {
         groups[t].push(ingredients[i]);
     }
 
+    // Render in a preferred order
     var order = ["sleep", "physical", "mental", "social", "other"];
     var html = "";
 
+    // Add sections in the known order first
     for (var j = 0; j < order.length; j++) {
         var key = order[j];
         if (groups[key] && groups[key].length > 0) {
@@ -202,6 +221,7 @@ function renderShop(ingredients) {
         }
     }
 
+    // If there are any unknown types, render them after the known ones
     for (var type in groups) {
         if (groups.hasOwnProperty(type)) {
             var inOrder = false;
@@ -210,18 +230,26 @@ function renderShop(ingredients) {
         }
     }
 
+    // Insert rendered HTML
     container.innerHTML = html;
 
+    // Hook up click handler for BUY buttons
     bindBuyButtons();
 }
+
 
 // ------------------------------
 // Bind buy buttons (event delegation)
 // ------------------------------
+
+// bindBuyButtons()
+// - Uses event delegation on #shopContent
+// - Only binds once using container.dataset.buyBound
 function bindBuyButtons() {
     var container = $("shopContent");
     if (!container) return;
 
+    // Prevent multiple bindings if renderShop is called again
     if (container.dataset.buyBound === "true") return;
     container.dataset.buyBound = "true";
 
@@ -229,6 +257,7 @@ function bindBuyButtons() {
         var target = e.target;
         if (!target) return;
 
+        // BUY button stores ingredient id in data-buy-id
         var id = target.getAttribute("data-buy-id");
         if (id) {
             buyIngredient(id, target);
@@ -236,37 +265,43 @@ function bindBuyButtons() {
     });
 }
 
+
 // ------------------------------
 // BUY (uses fetchMethod)
 // ------------------------------
+
+// buyIngredient(ingredientId, buttonEl)
+// - Checks user logged in (token exists)
+// - Checks user has enough points (using #playerPoints on the page)
+// - Calls POST /api/me/ingredients/:id/buy with token
+// - On success: shows modal + updates points immediately
+// CA2-safe:
+// ✅ DOES NOT decode token
+// ✅ DOES NOT send userId in request body
 function buyIngredient(ingredientId, buttonEl) {
     hideMessage();
 
+    // Must be logged in
     var token = getTokenOrRedirect();
     if (!token) return;
 
-    var userId = getUserIdFromToken(token);
-    if (!userId) {
-        showStatusModal("error", "Invalid session. Please login again.");
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
-        return;
-    }
-
     // Check points before calling backend
-    var cost = parseInt(buttonEl.getAttribute("data-cost")) || 0;
-    var currentPts = parseInt($("playerPoints") ? $("playerPoints").textContent : "0") || 0;
+    var cost = parseInt(buttonEl.getAttribute("data-cost"), 10) || 0;
+    var currentPts = parseInt($("playerPoints") ? $("playerPoints").textContent : "0", 10) || 0;
 
+    // Block purchase if user does not have enough points
     if (currentPts < cost) {
         showStatusModal("error", "Not enough points to buy this ingredient.");
         return;
     }
 
+    // lock BUY button UI during request
     if (buttonEl) {
         buttonEl.disabled = true;
         buttonEl.textContent = "BUYING...";
     }
 
+    // Purchase endpoint for current user (backend infers user from token)
     var url = BASE_URL + "/api/me/ingredients/" + ingredientId + "/buy";
 
     fetchMethod(url, function (status, res) {
@@ -278,7 +313,7 @@ function buyIngredient(ingredientId, buttonEl) {
                 (res && res.message) ? res.message : "Ingredient purchased successfully!"
             );
 
-            // Update points immediately
+            // Update points immediately on UI (client-side)
             if ($("playerPoints")) {
                 $("playerPoints").textContent = currentPts - cost;
             }
@@ -288,10 +323,10 @@ function buyIngredient(ingredientId, buttonEl) {
                 buttonEl.disabled = false;
                 buttonEl.textContent = "BUY";
             }
-            return; // IMPORTANT: stop here so it won't show error modal
+            return; // stop here so it won't show error modal
         }
 
-        // Unauthorized
+        // Unauthorized (token invalid/expired)
         if (status === 401 || status === 403) {
             showStatusModal("error", (res && res.message) ? res.message : "Unauthorized. Please login again.");
             localStorage.removeItem("token");
@@ -302,6 +337,12 @@ function buyIngredient(ingredientId, buttonEl) {
         // Other errors
         showStatusModal("error", (res && res.message) ? res.message : ("Purchase failed (HTTP " + status + ")"));
 
+        // unlock button after error
+        if (buttonEl) {
+            buttonEl.disabled = false;
+            buttonEl.textContent = "BUY";
+        }
+
     }, "POST", {}, token);
 }
 
@@ -309,6 +350,11 @@ function buyIngredient(ingredientId, buttonEl) {
 // ------------------------------
 // Load ingredients (uses fetchMethod)
 // ------------------------------
+
+// loadIngredients()
+// - Calls GET /api/ingredients
+// - Normalizes response into an array
+// - Renders the shop sections and cards
 function loadIngredients() {
     var token = getTokenOrRedirect();
     if (!token) return;
@@ -319,20 +365,24 @@ function loadIngredients() {
         if (status === 200) {
             var list = [];
 
+            // Normalize response shapes into list
             if (Array.isArray(res)) list = res;
             else if (Array.isArray(res.ingredients)) list = res.ingredients;
             else if (Array.isArray(res.data)) list = res.data;
             else if (Array.isArray(res.results)) list = res.results;
 
+            // If backend returned an empty list, show message
             if (!list || list.length === 0) {
                 showMessage("No ingredients found from /api/ingredients", true);
                 return;
             }
 
+            // Render shop UI
             renderShop(list);
             return;
         }
 
+        // Unauthorized (token invalid/expired)
         if (status === 401 || status === 403) {
             showMessage("Session expired. Please login again.", true);
             localStorage.removeItem("token");
@@ -340,19 +390,24 @@ function loadIngredients() {
             return;
         }
 
+        // Other errors
         showMessage((res && res.message) ? res.message : ("Failed to load ingredients (HTTP " + status + ")"), true);
     }, "GET", null, token);
 }
 
+
 // ------------------------------
-// Load user points (GET /api/users/:id) (uses fetchMethod)
+// Load user points (GET /api/me) (uses fetchMethod)
 // ------------------------------
+
+// loadUserPoints()
+// - Calls GET /api/me to retrieve the user's current points
+// - Updates #playerPoints textContent
+// CA2-safe:
+// ✅ DOES NOT decode token
 function loadUserPoints() {
     var token = getTokenOrRedirect();
     if (!token) return;
-
-    var userId = getUserIdFromToken(token);
-    if (!userId) return;
 
     fetchMethod(BASE_URL + "/api/me", function (status, res) {
         if (status === 200 && res) {
@@ -360,16 +415,35 @@ function loadUserPoints() {
             if (user && user.points !== undefined && $("playerPoints")) {
                 $("playerPoints").textContent = user.points;
             }
+            return;
         }
+
+        // If session expired, force relogin
+        if (status === 401 || status === 403) {
+            showMessage("Session expired. Please login again.", true);
+            localStorage.removeItem("token");
+            window.location.href = "login.html";
+            return;
+        }
+
+        // Other failures: show placeholder
+        if ($("playerPoints")) $("playerPoints").textContent = "0";
     }, "GET", null, token);
 }
+
 
 // ------------------------------
 // Init
 // ------------------------------
+
+// Runs when the shop page loads:
+// - sets up logout button
+// - shows placeholder points while loading
+// - loads user points first, then loads ingredient list
 document.addEventListener("DOMContentLoaded", function () {
     setupLogout();
 
+    // placeholder while loading points
     if ($("playerPoints")) $("playerPoints").textContent = "—";
 
     loadUserPoints();

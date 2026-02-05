@@ -1,45 +1,80 @@
-function loadUserPoints() {
-    const token = localStorage.getItem("token");
-    if (!token) return;
+// ---------------- Shared state ----------------
+var currentUserId = null;        // filled from GET /api/me
+var completionModalInstance = null;
+var pendingButton = null;        // the COMPLETE button user clicked
 
-    const userId = getUserIdFromToken(token);
-    if (!userId) return;
 
-    const callback = (status, data) => {
-        console.log("GET /api/users/:id status:", status);
-        console.log("GET /api/users/:id data:", data);
-
-        if (status === 200 && data) {
-            // your sendResponse() might wrap in different ways
-            // try common shapes:
-            const user = data.data || data.user || data;
-
-            if (user && typeof user.points !== "undefined") {
-                document.getElementById("playerPoints").textContent = user.points;
-            }
-        }
-    };
-
-    fetchMethod(currentUrl + "/api/me", callback, "GET", null, token);
-}
-
+// ---------------- Notifications ----------------
 function showNotification(message, type) {
-    const notification = document.createElement("div");
+    var notification = document.createElement("div");
     notification.className = "notification " + type;
     notification.textContent = message;
 
     document.body.appendChild(notification);
 
-    setTimeout(() => notification.classList.add("show"), 10);
+    setTimeout(function () {
+        notification.classList.add("show");
+    }, 10);
 
-    setTimeout(() => {
+    setTimeout(function () {
         notification.classList.remove("show");
-        setTimeout(() => notification.remove(), 300);
+        setTimeout(function () {
+            notification.remove();
+        }, 300);
     }, 3000);
 }
 
+
+// ---------------- User helpers ----------------
+function getTokenOrNull() {
+    return localStorage.getItem("token");
+}
+
+// GET /api/me (uses token) to retrieve current user's id/points/username
+function loadMe(done) {
+    var token = getTokenOrNull();
+    if (!token) {
+        currentUserId = null;
+        if (typeof done === "function") done(null, null);
+        return;
+    }
+
+    fetchMethod(currentUrl + "/api/me", function (status, data) {
+        if (status !== 200 || !data) {
+            currentUserId = null;
+            if (typeof done === "function") done(status, null);
+            return;
+        }
+
+        // Normalize response shape
+        var user = data.data || data.user || data;
+
+        // Try common id fields (backend dependent)
+        var id = null;
+        if (user) id = user.id || user.user_id || user.userId || null;
+
+        currentUserId = id;
+
+        if (typeof done === "function") done(200, user);
+    }, "GET", null, token);
+}
+
+// Loads points from /api/me and updates #playerPoints
+function loadUserPoints() {
+    loadMe(function (status, user) {
+        if (status !== 200 || !user) return;
+
+        if (typeof user.points !== "undefined") {
+            var el = document.getElementById("playerPoints");
+            if (el) el.textContent = user.points;
+        }
+    });
+}
+
+
+// ---------------- UI counters ----------------
 function updatePlayerPoints(newTotalPoints) {
-    const pointsElement = document.getElementById("playerPoints");
+    var pointsElement = document.getElementById("playerPoints");
     if (!pointsElement) return;
 
     if (typeof newTotalPoints === "number") {
@@ -48,46 +83,21 @@ function updatePlayerPoints(newTotalPoints) {
 }
 
 function addPlayerPoints(addPoints) {
-    const pointsElement = document.getElementById("playerPoints");
+    var pointsElement = document.getElementById("playerPoints");
     if (!pointsElement) return;
 
-    const currentPoints = parseInt(pointsElement.textContent) || 0;
+    var currentPoints = parseInt(pointsElement.textContent, 10) || 0;
     pointsElement.textContent = currentPoints + addPoints;
 }
 
 function updateCompletedCount() {
-    const completedElement = document.getElementById("completedToday");
+    var completedElement = document.getElementById("completedToday");
     if (!completedElement) return;
 
-    const currentCount = parseInt(completedElement.textContent) || 0;
+    var currentCount = parseInt(completedElement.textContent, 10) || 0;
     completedElement.textContent = currentCount + 1;
 }
 
-function parseJwt(token) {
-    try {
-        const base64Url = token.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        const jsonPayload = decodeURIComponent(
-            atob(base64)
-                .split("")
-                .map(function (c) {
-                    return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-                })
-                .join("")
-        );
-        return JSON.parse(jsonPayload);
-    } catch (e) {
-        return null;
-    }
-}
-
-function getUserIdFromToken(token) {
-    const payload = parseJwt(token);
-    if (!payload) return null;
-
-    // support common key names
-    return payload.user_id || payload.id || payload.userId || payload.userid || payload.sub || null;
-}
 
 // ---------------- Render helpers ----------------
 function getGridIdByType(type) {
@@ -107,17 +117,17 @@ function getIconByType(type) {
 }
 
 function makeChallengeCard(ch) {
-    const icon = getIconByType(ch.type);
+    var icon = getIconByType(ch.type);
 
-    const div = document.createElement("div");
+    var div = document.createElement("div");
     div.className = "challenge-card";
     div.setAttribute("data-id", ch.id);
 
-    const title = (ch.description || "CHALLENGE").toUpperCase();
+    var title = (ch.description || "CHALLENGE").toUpperCase();
 
     div.innerHTML =
         '<div class="challenge-header">' +
-        '<div class="challenge-category cat-' + ch.type + '">' + ch.type.toUpperCase() + "</div>" +
+        '<div class="challenge-category cat-' + ch.type + '">' + String(ch.type).toUpperCase() + "</div>" +
         "</div>" +
         '<div class="challenge-icon">' + icon + "</div>" +
         '<h3 class="challenge-title">' + title + "</h3>" +
@@ -131,9 +141,9 @@ function makeChallengeCard(ch) {
 }
 
 function clearAllGrids() {
-    const ids = ["grid-sleep", "grid-physical", "grid-mental", "grid-social"];
-    for (let i = 0; i < ids.length; i++) {
-        const el = document.getElementById(ids[i]);
+    var ids = ["grid-sleep", "grid-physical", "grid-mental", "grid-social"];
+    for (var i = 0; i < ids.length; i++) {
+        var el = document.getElementById(ids[i]);
         if (el) el.innerHTML = "";
     }
 }
@@ -141,48 +151,134 @@ function clearAllGrids() {
 function renderChallenges(challenges) {
     clearAllGrids();
 
-    for (let i = 0; i < challenges.length; i++) {
-        const ch = challenges[i];
-        const gridId = getGridIdByType(ch.type);
+    for (var i = 0; i < challenges.length; i++) {
+        var ch = challenges[i];
+        var gridId = getGridIdByType(ch.type);
         if (!gridId) continue;
 
-        const grid = document.getElementById(gridId);
+        var grid = document.getElementById(gridId);
         if (!grid) continue;
 
         grid.appendChild(makeChallengeCard(ch));
     }
 }
 
+
+// ---------------- Completion state ----------------
+function getTodayString() {
+    var d = new Date();
+    var yyyy = d.getFullYear();
+    var mm = String(d.getMonth() + 1).padStart(2, "0");
+    var dd = String(d.getDate()).padStart(2, "0");
+    return yyyy + "-" + mm + "-" + dd;
+}
+
+function getCompletionStorageKey(userId) {
+    return "completedState_" + userId + "_" + getTodayString();
+}
+
+function loadCompletionState(userId) {
+    var key = getCompletionStorageKey(userId);
+    var raw = localStorage.getItem(key);
+
+    if (!raw) {
+        return { completedCount: 0, completedIds: [] };
+    }
+
+    try {
+        var parsed = JSON.parse(raw);
+        return {
+            completedCount: parsed.completedCount || 0,
+            completedIds: Array.isArray(parsed.completedIds) ? parsed.completedIds : []
+        };
+    } catch (e) {
+        return { completedCount: 0, completedIds: [] };
+    }
+}
+
+function saveCompletionState(userId, state) {
+    var key = getCompletionStorageKey(userId);
+    localStorage.setItem(key, JSON.stringify(state));
+}
+
+function applyCompletionStateToUI(userId) {
+    if (!userId) return;
+
+    var state = loadCompletionState(userId);
+
+    // set completed count
+    var completedEl = document.getElementById("completedToday");
+    if (completedEl) {
+        completedEl.textContent = state.completedCount;
+    }
+
+    // mark completed buttons
+    for (var i = 0; i < state.completedIds.length; i++) {
+        var id = state.completedIds[i];
+        var card = document.querySelector('.challenge-card[data-id="' + id + '"]');
+        if (!card) continue;
+
+        card.classList.add("completed");
+
+        var btn = card.querySelector(".challenge-btn");
+        if (!btn) continue;
+
+        btn.textContent = "COMPLETED ✓";
+        btn.classList.remove("start-btn");
+        btn.classList.add("completed-btn");
+        btn.disabled = true;
+    }
+}
+
+function recordCompletion(userId, challengeId) {
+    if (!userId) return;
+
+    var state = loadCompletionState(userId);
+    var cid = parseInt(challengeId, 10);
+
+    // only add if not already completed
+    if (state.completedIds.indexOf(cid) === -1) {
+        state.completedIds.push(cid);
+        state.completedCount = state.completedCount + 1;
+        saveCompletionState(userId, state);
+    }
+}
+
+
 // ---------------- API calls ----------------
 function loadChallenges() {
-    const callback = (status, data) => {
+    var token = getTokenOrNull();
+
+    var callback = function (status, data) {
         console.log("GET /api/challenges status:", status);
         console.log("GET /api/challenges data:", data);
 
         if (status === 200 && data) {
-            // your backend returns: { message: "Success", data: [...] }
-            const list = Array.isArray(data) ? data : (data.data || data.challenges || []);
-            console.log("Rendering challenges count:", list.length);
+            // backend may return array or wrap in { data: [...] }
+            var list = Array.isArray(data) ? data : (data.data || data.challenges || []);
             renderChallenges(list);
 
-            const token = localStorage.getItem("token");
-            const userId = token ? getUserIdFromToken(token) : null;
-            if (userId) applyCompletionStateToUI(userId);
+            // After rendering, apply completion state if we know the user
+            if (currentUserId) {
+                applyCompletionStateToUI(currentUserId);
+            } else {
+                // If not yet known, fetch /api/me then apply
+                loadMe(function () {
+                    if (currentUserId) applyCompletionStateToUI(currentUserId);
+                });
+            }
         } else {
             showNotification((data && data.message) ? data.message : "Failed to load challenges", "error");
         }
     };
 
-    const token = localStorage.getItem("token");
     fetchMethod(currentUrl + "/api/challenges", callback, "GET", null, token);
 }
 
-// ---------------- Modal handling + completion ----------------
-var completionModalInstance = null;
-var pendingButton = null; // the button user clicked (so we can update it after success)
 
+// ---------------- Modal handling + completion ----------------
 function openCompletionModal(challengeId, button) {
-    const token = localStorage.getItem("token");
+    var token = getTokenOrNull();
     if (!token) {
         alert("Please login to complete challenges!");
         window.location.href = "login.html";
@@ -190,78 +286,94 @@ function openCompletionModal(challengeId, button) {
     }
 
     // store which challenge is being completed
-    document.getElementById("completionChallengeId").value = challengeId;
-    document.getElementById("completionDetails").value = "";
+    var idEl = document.getElementById("completionChallengeId");
+    var detailsEl = document.getElementById("completionDetails");
+    if (idEl) idEl.value = challengeId;
+    if (detailsEl) detailsEl.value = "";
 
     pendingButton = button;
 
-    const modalEl = document.getElementById("completionModal");
+    var modalEl = document.getElementById("completionModal");
     completionModalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
     completionModalInstance.show();
 }
 
+function getPointsFromCard(button) {
+    if (!button) return 0;
+
+    var card = button.closest(".challenge-card");
+    if (!card) return 0;
+
+    var rewardEl = card.querySelector(".reward-value");
+    if (!rewardEl) return 0;
+
+    var text = rewardEl.textContent;
+    var match = text.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+}
+
 function submitCompletion() {
-    const token = localStorage.getItem("token");
+    var token = getTokenOrNull();
     if (!token) {
         alert("Please login to complete challenges!");
         window.location.href = "login.html";
         return;
     }
 
-    const userId = getUserIdFromToken(token);
-    if (!userId) {
-        alert("Invalid session. Please login again.");
-        localStorage.removeItem("token");
-        window.location.href = "login.html";
-        return;
-    }
+    var challengeIdEl = document.getElementById("completionChallengeId");
+    var detailsEl = document.getElementById("completionDetails");
 
-    const challengeId = document.getElementById("completionChallengeId").value;
-    const details = document.getElementById("completionDetails").value;
+    var challengeId = challengeIdEl ? challengeIdEl.value : null;
+    var details = detailsEl ? detailsEl.value : "";
 
     if (!challengeId) {
         showNotification("Missing challenge id", "error");
         return;
     }
 
-    // optionally require non-empty details:
-    if (!details || details.trim().length === 0) {
+    // require non-empty details
+    if (!details || String(details).trim().length === 0) {
         showNotification("Please enter some details.", "error");
         return;
     }
 
     // lock UI
-    const submitBtn = document.getElementById("submitCompletion");
-    submitBtn.disabled = true;
-    submitBtn.textContent = "SUBMITTING...";
+    var submitBtn = document.getElementById("submitCompletion");
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "SUBMITTING...";
+    }
 
     if (pendingButton) {
         pendingButton.disabled = true;
         pendingButton.textContent = "COMPLETING...";
     }
 
-    const postData = {
-        user_id: userId,
+    var postData = {
         details: details
     };
 
-    const callback = (status, data) => {
+    var callback = function (status, data) {
         console.log("POST /api/challenges/:id status:", status);
         console.log("POST /api/challenges/:id data:", data);
 
         // unlock submit button
-        submitBtn.disabled = false;
-        submitBtn.textContent = "SUBMIT";
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "SUBMIT";
+        }
 
         if (status === 201 || status === 200) {
             // close modal
             if (completionModalInstance) completionModalInstance.hide();
 
-            // show success modal
-            openSuccessModal("You earned +" + getPointsFromCard(pendingButton) + " points!");
+            // success message (use points from UI card)
+            var pts = getPointsFromCard(pendingButton);
+            openSuccessModal("You earned +" + pts + " points!");
 
+            // mark card/button as completed
             if (pendingButton) {
-                const card = pendingButton.closest(".challenge-card");
+                var card = pendingButton.closest(".challenge-card");
                 if (card) card.classList.add("completed");
 
                 pendingButton.textContent = "COMPLETED ✓";
@@ -270,18 +382,32 @@ function submitCompletion() {
                 pendingButton.disabled = true;
             }
 
-            const pts = getPointsFromCard(pendingButton || button);
-            addPlayerPoints(pts);
-            // points update (depending on your backend response)
+            // Update points display:
+            // - Prefer server truth if provided, else add the points shown on the card
             if (data && typeof data.total_points === "number") {
                 updatePlayerPoints(data.total_points);
             } else if (data && typeof data.points_awarded === "number") {
                 addPlayerPoints(data.points_awarded);
+            } else {
+                addPlayerPoints(pts);
             }
 
+            // Update completed count UI and localStorage state
+            // Ensure we have currentUserId (fetch /api/me if needed)
             updateCompletedCount();
-            recordCompletion(userId, challengeId);
-            applyCompletionStateToUI(userId);
+
+            if (currentUserId) {
+                recordCompletion(currentUserId, challengeId);
+                applyCompletionStateToUI(currentUserId);
+            } else {
+                loadMe(function () {
+                    if (currentUserId) {
+                        recordCompletion(currentUserId, challengeId);
+                        applyCompletionStateToUI(currentUserId);
+                    }
+                });
+            }
+
             return;
         }
 
@@ -297,94 +423,10 @@ function submitCompletion() {
     fetchMethod(currentUrl + "/api/challenges/" + challengeId, callback, "POST", postData, token);
 }
 
-function getPointsFromCard(button) {
-    const card = button.closest(".challenge-card");
-    if (!card) return 0;
 
-    const rewardEl = card.querySelector(".reward-value");
-    if (!rewardEl) return 0;
-
-    const text = rewardEl.textContent;
-    const match = text.match(/\d+/);
-    return match ? parseInt(match[0]) : 0;
-}
-
-function getTodayString() {
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    return yyyy + "-" + mm + "-" + dd;
-}
-
-function getCompletionStorageKey(userId) {
-    return "completedState_" + userId + "_" + getTodayString();
-}
-
-function loadCompletionState(userId) {
-    const key = getCompletionStorageKey(userId);
-    const raw = localStorage.getItem(key);
-    if (!raw) {
-        return { completedCount: 0, completedIds: [] };
-    }
-
-    try {
-        const parsed = JSON.parse(raw);
-        return {
-            completedCount: parsed.completedCount || 0,
-            completedIds: Array.isArray(parsed.completedIds) ? parsed.completedIds : []
-        };
-    } catch (e) {
-        return { completedCount: 0, completedIds: [] };
-    }
-}
-
-function saveCompletionState(userId, state) {
-    const key = getCompletionStorageKey(userId);
-    localStorage.setItem(key, JSON.stringify(state));
-}
-
-function applyCompletionStateToUI(userId) {
-    const state = loadCompletionState(userId);
-
-    // set completed count
-    const completedEl = document.getElementById("completedToday");
-    if (completedEl) {
-        completedEl.textContent = state.completedCount;
-    }
-
-    // mark completed buttons
-    for (let i = 0; i < state.completedIds.length; i++) {
-        const id = state.completedIds[i];
-        const card = document.querySelector('.challenge-card[data-id="' + id + '"]');
-        if (!card) continue;
-
-        card.classList.add("completed");
-
-        const btn = card.querySelector(".challenge-btn");
-        if (!btn) continue;
-
-        btn.textContent = "COMPLETED ✓";
-        btn.classList.remove("start-btn");
-        btn.classList.add("completed-btn");
-        btn.disabled = true;
-    }
-}
-
-function recordCompletion(userId, challengeId) {
-    const state = loadCompletionState(userId);
-    const cid = parseInt(challengeId);
-
-    // only add if not already completed
-    if (state.completedIds.indexOf(cid) === -1) {
-        state.completedIds.push(cid);
-        state.completedCount = state.completedCount + 1;
-        saveCompletionState(userId, state);
-    }
-}
-
+// ---------------- Create Challenge ----------------
 function setCreateChallengeError(msg) {
-    const el = document.getElementById("createChallengeError");
+    var el = document.getElementById("createChallengeError");
     if (!el) return;
 
     if (!msg) {
@@ -398,18 +440,19 @@ function setCreateChallengeError(msg) {
 }
 
 function appendChallengeToUI(ch) {
-    const gridId = getGridIdByType(ch.type);
+    var gridId = getGridIdByType(ch.type);
     if (!gridId) return;
 
-    const grid = document.getElementById(gridId);
+    var grid = document.getElementById(gridId);
     if (!grid) return;
 
     grid.appendChild(makeChallengeCard(ch));
 }
 
-const MAX_CHALLENGE_POINTS = 20;
+var MAX_CHALLENGE_POINTS = 20;
+
 function createChallenge() {
-    const token = localStorage.getItem("token");
+    var token = getTokenOrNull();
     if (!token) {
         alert("Please login to create challenges!");
         window.location.href = "login.html";
@@ -418,16 +461,16 @@ function createChallenge() {
 
     setCreateChallengeError("");
 
-    const descEl = document.getElementById("newChallengeDesc");
-    const ptsEl = document.getElementById("newChallengePoints");
-    const typeEl = document.getElementById("newChallengeType");
-    const btnEl = document.getElementById("createChallengeBtn");
+    var descEl = document.getElementById("newChallengeDesc");
+    var ptsEl = document.getElementById("newChallengePoints");
+    var typeEl = document.getElementById("newChallengeType");
+    var btnEl = document.getElementById("createChallengeBtn");
 
     if (!descEl || !ptsEl || !typeEl || !btnEl) return;
 
-    const description = (descEl.value || "").trim();
-    const points = parseInt(ptsEl.value, 10);
-    const type = typeEl.value;
+    var description = String(descEl.value || "").trim();
+    var points = parseInt(ptsEl.value, 10);
+    var type = typeEl.value;
 
     if (!description) {
         setCreateChallengeError("Please enter a description.");
@@ -448,13 +491,13 @@ function createChallenge() {
     btnEl.disabled = true;
     btnEl.textContent = "CREATING...";
 
-    const postData = {
+    var postData = {
         description: description,
         points: points,
         type: type
     };
 
-    const callback = (status, data) => {
+    var callback = function (status, data) {
         console.log("POST /api/challenges status:", status);
         console.log("POST /api/challenges data:", data);
 
@@ -463,14 +506,13 @@ function createChallenge() {
         btnEl.textContent = "CREATE CHALLENGE";
 
         if (status === 201 && data) {
-            const created = data.data || data.challenge || data;
+            var created = data.data || data.challenge || data;
 
             if (!created || typeof created.id === "undefined") {
                 showNotification("Created, but response shape is unexpected.", "error");
                 return;
             }
 
-            // add to UI immediately
             appendChallengeToUI(created);
 
             // reset form
@@ -483,8 +525,7 @@ function createChallenge() {
             return;
         }
 
-        // show server-side error
-        const msg = (data && data.message) ? data.message : "Failed to create challenge";
+        var msg = (data && data.message) ? data.message : "Failed to create challenge";
         setCreateChallengeError(msg);
         showNotification(msg, "error");
     };
@@ -492,6 +533,8 @@ function createChallenge() {
     fetchMethod(currentUrl + "/api/challenges", callback, "POST", postData, token);
 }
 
+
+// ---------------- Success modal ----------------
 function openSuccessModal(message) {
     var el = document.getElementById("successModal");
     var msgEl = document.getElementById("successModalMessage");
@@ -502,6 +545,7 @@ function openSuccessModal(message) {
     inst.show();
 }
 
+
 // ---------------- Events ----------------
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Challenges page loaded!");
@@ -511,11 +555,17 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    loadChallenges();
-    loadUserPoints();
+    // Load /api/me once so we have currentUserId for completion state key
+    loadMe(function () {
+        // Load the page data after user info is known (or null if not logged in)
+        loadChallenges();
+        loadUserPoints();
+
+        if (currentUserId) applyCompletionStateToUI(currentUserId);
+    });
 
     // Submit button inside modal
-    const submitBtn = document.getElementById("submitCompletion");
+    var submitBtn = document.getElementById("submitCompletion");
     if (submitBtn) {
         submitBtn.addEventListener("click", function () {
             submitCompletion();
@@ -524,21 +574,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Event delegation for COMPLETE buttons
     document.body.addEventListener("click", function (e) {
-        const btn = e.target;
-        if (!btn.classList) return;
+        var btn = e.target;
+        if (!btn || !btn.classList) return;
         if (!btn.classList.contains("challenge-btn")) return;
 
+        // ignore already completed
         if (btn.classList.contains("completed-btn")) return;
 
-        const card = btn.closest(".challenge-card");
-        const challengeId = card ? card.getAttribute("data-id") : null;
+        var card = btn.closest(".challenge-card");
+        var challengeId = card ? card.getAttribute("data-id") : null;
         if (!challengeId) return;
 
         openCompletionModal(challengeId, btn);
     });
 
     // Create Challenge form
-    const createForm = document.getElementById("createChallengeForm");
+    var createForm = document.getElementById("createChallengeForm");
     if (createForm) {
         createForm.addEventListener("submit", function (e) {
             e.preventDefault();
