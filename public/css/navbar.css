@@ -1,7 +1,3 @@
-/* =========================
-   NAVIGATION BAR
-========================= */
-
 body {
     margin: 0;
     padding: 0;
@@ -13,7 +9,6 @@ body {
     height: auto;
 }
 
-/* Navigation Bar */
 .navbar {
     background: var(--panel-bg);
     border-bottom: 4px solid var(--dark-stone);
@@ -148,17 +143,9 @@ body {
         padding: 14px 20px;
         border-bottom: 2px solid rgba(255, 255, 255, 0.12);
     }
-
-    /* Optional: reduce brand size so it fits */
-    .nav-brand {
-        font-size: 10px;
-        gap: 10px;
-    }
 }
 
-/* =========================
-   FOOTER
-========================= */
+/*Footer*/
 
 .footer {
     background: var(--panel-bg);

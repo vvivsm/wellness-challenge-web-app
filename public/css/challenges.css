@@ -121,11 +121,6 @@ body {
     text-shadow: 1px 1px 0 var(--text-shadow);
 }
 
-.pixel-input:focus {
-    box-shadow: none !important;
-    border-color: var(--emerald) !important;
-}
-
 .create-challenge-error {
     margin-top: 14px;
     padding: 12px;
@@ -195,36 +190,6 @@ body {
     color: #E74C3C;
 }
 
-.category-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-}
-
-.category-tab {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 10px;
-    padding: 12px 20px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 3px solid var(--stone-gray);
-    color: var(--text-white);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-shadow: 2px 2px 0 var(--text-shadow);
-}
-
-.category-tab:hover {
-    border-color: var(--gold);
-    background: rgba(255, 170, 0, 0.1);
-}
-
-.category-tab.active {
-    border-color: var(--emerald);
-    background: linear-gradient(135deg, rgba(23, 221, 98, 0.2) 0%, rgba(90, 155, 31, 0.2) 100%);
-    color: var(--success-green);
-}
-
 /* Challenges Section */
 .challenges-section {
     background: var(--panel-bg);
@@ -249,35 +214,6 @@ body {
     padding: 25px;
     transition: all 0.3s;
     position: relative;
-}
-
-.challenge-card.available {
-    border-color: var(--stone-gray);
-}
-
-.challenge-card.available:hover {
-    border-color: var(--emerald);
-    transform: translateY(-5px);
-    box-shadow: 0 8px 0 3px rgba(0, 0, 0, 0.5);
-}
-
-.challenge-card.daily {
-    border-color: var(--gold);
-}
-
-.challenge-card.daily:hover {
-    box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
-}
-
-.challenge-card.in-progress {
-    border-color: var(--diamond);
-    background: linear-gradient(135deg, rgba(93, 173, 226, 0.1) 0%, rgba(59, 138, 184, 0.1) 100%);
-}
-
-.challenge-card.completed {
-    border-color: var(--success-green);
-    background: linear-gradient(135deg, rgba(85, 255, 85, 0.1) 0%, rgba(23, 221, 98, 0.1) 100%);
-    opacity: 0.7;
 }
 
 .challenge-header {
@@ -315,28 +251,6 @@ body {
     border-color: #E74C3C;
     color: #E74C3C;
     background: rgba(231, 76, 60, 0.2);
-}
-
-.challenge-difficulty {
-    font-size: 7px;
-    padding: 6px 10px;
-    border: 2px solid;
-    text-shadow: 1px 1px 0 var(--text-shadow);
-}
-
-.difficulty.easy {
-    border-color: var(--success-green);
-    color: var(--success-green);
-}
-
-.difficulty.medium {
-    border-color: var(--gold);
-    color: var(--gold);
-}
-
-.difficulty.hard {
-    border-color: var(--error-red);
-    color: var(--error-red);
 }
 
 .challenge-icon {
@@ -385,40 +299,6 @@ body {
     text-shadow: 2px 2px 0 var(--text-shadow);
 }
 
-.challenge-timer {
-    text-align: center;
-    font-size: 8px;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 20px;
-}
-
-.challenge-progress {
-    margin-bottom: 20px;
-}
-
-.progress-bar {
-    background: rgba(0, 0, 0, 0.5);
-    height: 25px;
-    border: 2px solid var(--dark-stone);
-    position: relative;
-    margin-bottom: 8px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    background: linear-gradient(90deg, var(--grass-green) 0%, var(--emerald) 100%);
-    height: 100%;
-    transition: width 0.3s ease;
-    box-shadow: inset 0 -3px 0 1px rgba(0, 0, 0, 0.3);
-}
-
-.progress-text {
-    font-size: 8px;
-    color: rgba(255, 255, 255, 0.8);
-    text-align: center;
-    display: block;
-}
-
 /* Challenge Buttons */
 .challenge-btn {
     width: 100%;
@@ -448,50 +328,10 @@ body {
         0 6px 0 2px rgba(0, 0, 0, 0.4);
 }
 
-.start-btn:active {
-    transform: translateY(2px);
-    box-shadow:
-        inset 0 0 0 2px rgba(255, 255, 255, 0.2),
-        0 2px 0 2px rgba(0, 0, 0, 0.4);
-}
-
-.continue-btn {
-    background: linear-gradient(180deg, var(--diamond) 0%, #3B8AB8 100%);
-    border-color: #3B8AB8;
-    color: var(--text-white);
-    box-shadow:
-        inset 0 0 0 2px rgba(255, 255, 255, 0.2),
-        0 4px 0 2px rgba(0, 0, 0, 0.4);
-}
-
-.continue-btn:hover {
-    background: linear-gradient(180deg, #6DC2FF 0%, #4A9BCF 100%);
-    transform: translateY(-2px);
-}
-
 .completed-btn {
     background: linear-gradient(180deg, var(--success-green) 0%, var(--emerald) 100%);
     border-color: var(--emerald);
     color: var(--text-white);
     cursor: not-allowed;
     opacity: 0.7;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .page-title {
-        font-size: 18px;
-    }
-
-    .challenges-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .header-stats {
-        gap: 20px;
-    }
-
-    .main-container {
-        padding: 20px 15px;
-    }
 }

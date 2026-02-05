@@ -22,44 +22,43 @@
         <p class="page-subtitle">Craft soups using ingredients from your inventory!</p>
     </div>
 
-    <div class="container-xxl px-3 px-md-4">
-        <!-- Main Content -->
-        <div class="main-container">
+    <!-- Main Content -->
+    <div class="main-container">
 
-            <!-- Inventory Panel -->
-            <div class="inventory-panel">
-                <h2 class="panel-title">YOUR INGREDIENTS</h2>
-                <div class="inventory-grid" id="inventoryGrid">
-                    <!-- injected by craft.js -->
-                </div>
+        <!-- Inventory Panel -->
+        <div class="inventory-panel">
+            <h2 class="panel-title">YOUR INGREDIENTS</h2>
+            <div class="inventory-grid" id="inventoryGrid">
+                <!-- injected by craft.js -->
             </div>
-
-            <!-- Recipe Book -->
-            <div class="recipes-panel">
-                <h2 class="panel-title">RECIPE BOOK</h2>
-                <div class="recipes-container" id="recipesContainer">
-                    <!-- injected by craft.js -->
-                </div>
-            </div>
-
         </div>
 
-        <!-- CSS Modal (status) -->
-        <div class="status-modal" id="statusModal">
-            <div class="status-modal-box" id="statusModalBox">
-                <div class="status-modal-header">
-                    <div class="status-modal-title" id="statusTitle">STATUS</div>
-                    <button class="status-modal-close" id="statusCloseBtn">×</button>
-                </div>
-                <div class="status-modal-body">
-                    <p id="statusMessage">...</p>
-                </div>
-                <div class="status-modal-footer">
-                    <button class="status-modal-ok" id="statusOkBtn">OK</button>
-                </div>
+        <!-- Recipe Book -->
+        <div class="recipes-panel">
+            <h2 class="panel-title">RECIPE BOOK</h2>
+            <div class="recipes-container" id="recipesContainer">
+                <!-- injected by craft.js -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CSS Modal (status) -->
+    <div class="status-modal" id="statusModal">
+        <div class="status-modal-box" id="statusModalBox">
+            <div class="status-modal-header">
+                <div class="status-modal-title" id="statusTitle">STATUS</div>
+                <button class="status-modal-close" id="statusCloseBtn">×</button>
+            </div>
+            <div class="status-modal-body">
+                <p id="statusMessage">...</p>
+            </div>
+            <div class="status-modal-footer">
+                <button class="status-modal-ok" id="statusOkBtn">OK</button>
             </div>
         </div>
     </div>
+
     <div id="footerMount"></div>
 
     <script src="js/getCurrentURL.js" type="text/javascript"></script>

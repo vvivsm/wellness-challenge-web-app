@@ -27,12 +27,6 @@ router.get('/',
     sendResponse()
 );
 
-//Q10
-router.get('/:id',
-    challengeController.readChallengeById,
-    sendResponse()
-)
-
 //Q9
 router.post('/:id',
     jwtMiddleware.verifyToken,

@@ -153,7 +153,7 @@ function buildSectionHtml(type, items) {
 
     html += '<div class="shop-section type-' + type + '">';
     html += '  <h2 class="section-title">';
-    html += '    <span class="rarity-badge">' + meta.title + "</span>";
+    html += '    <span class="type-badge">' + meta.title + "</span>";
     html += "  </h2>";
     html += '  <div class="items-grid">';
 
@@ -167,12 +167,11 @@ function buildSectionHtml(type, items) {
         html += '    <div class="item-card type-' + type + '">';
         html += '      <div class="item-icon">' + icon + "</div>";
         html += '      <h3 class="item-name">' + escapeHtml(name.toUpperCase()) + "</h3>";
-        html += '      <p class="item-description">Type: ' + escapeHtml(type) + "</p>";
         html += '      <div class="item-price">';
         html += '        <span class="price-icon">💰</span>';
         html += '        <span class="price-value">' + cost + "</span>";
         html += "      </div>";
-        html += '      <button class="add-to-cart-btn" data-buy-id="' + id + '" data-cost="' + cost + '">BUY</button>';
+        html += '      <button class="buy-btn" data-buy-id="' + id + '" data-cost="' + cost + '">BUY</button>';
         html += "    </div>";
     }
 
