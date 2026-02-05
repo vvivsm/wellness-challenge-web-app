@@ -1,4 +1,4 @@
-# 🥣 Wellness Quest – Backend Web Development CA2
+# SOULSIP – Backend Web Development CA2
 
 ## Module
 **ST0503 – Backend Web Development**  
@@ -9,7 +9,7 @@
 
 ## 📌 Project Overview
 
-**Wellness Quest** is a gamified wellness challenge web application built on top of the CA1 backend server.  
+**Soulsip** is a gamified wellness challenge web application built on top of the CA1 backend server.  
 Users can register, log in securely, complete wellness challenges, earn points, and interact with gamification features such as crafting, inventory, and rewards.
 
 This project focuses on **frontend development and frontend–backend integration**, while enhancing backend security and functionality using **JWT authentication** and **bcrypt password hashing**.
@@ -90,14 +90,122 @@ This project focuses on **frontend development and frontend–backend integratio
 
 ## 📂 Project Structure
 
-
-
+```
+BED-CA2/VVIVSM/SP
+│
+├── node_modules/
+│
+├── public/
+│ ├── css/
+│ │ ├── challenges.css
+│ │ ├── craft.css
+│ │ ├── index.css
+│ │ ├── login.css
+│ │ ├── navbar.css
+│ │ ├── register.css
+│ │ └── shop.css
+│ │
+│ ├── js/
+│ │ ├── challenges.js
+│ │ ├── craft.js
+│ │ ├── getCurrentURL.js
+│ │ ├── index.js
+│ │ ├── login.js
+│ │ ├── navbar.js
+│ │ ├── queryCmds.js
+│ │ ├── register.js
+│ │ └── shop.js
+│ │
+│ ├── challenges.html
+│ ├── craft.html
+│ ├── index.html
+│ ├── login.html
+│ ├── register.html
+│ └── shop.html
+│
+├── src/
+│ ├── configs/
+│ │ ├── createSchema.js
+│ │ └── initTables.js
+│ │
+│ ├── controllers/
+│ │ ├── authController.js
+│ │ ├── challengeController.js
+│ │ ├── completionController.js
+│ │ ├── craftController.js
+│ │ ├── exampleController.js
+│ │ ├── ingredientController.js
+│ │ ├── recipeController.js
+│ │ ├── userController.js
+│ │ ├── userCraftedRecipeController.js
+│ │ └── userIngredientController.js
+│ │
+│ ├── middleware/
+│ │ ├── bcryptMiddleware.js
+│ │ ├── jwtMiddleware.js
+│ │ ├── request.js
+│ │ └── response.js
+│ │
+│ ├── models/
+│ │ ├── authModel.js
+│ │ ├── challengeModel.js
+│ │ ├── completionModel.js
+│ │ ├── ingredientModel.js
+│ │ ├── recipeModel.js
+│ │ ├── userCraftedRecipeModel.js
+│ │ ├── userIngredientModel.js
+│ │ └── userModel.js
+│ │
+│ ├── routes/
+│ │ ├── authRoutes.js
+│ │ ├── challengeRoutes.js
+│ │ ├── ingredientRoutes.js
+│ │ ├── mainRoutes.js
+│ │ ├── recipeRoutes.js
+│ │ └── userRoutes.js
+│ │
+│ ├── services/
+│ │ └── db.js
+│ │
+│ └── app.js
+│
+├── .env
+├── .gitignore
+├── index.js
+├── package.json
+├── package-lock.json
+└── README.md
+```
 ---
 
 ## ⚙️ Setup Instructions
-
+```
 ### 1. Clone the Repository
-```bash
-git clone <your-github-classroom-repo-url>
+bash git clone <ST0503-BED/bed-ca2-vvivsm-sp>
 cd project-root
 
+## 2. Install Backend Dependencies
+npm install
+
+## 3. Configure Database
+- Create a MySQL database
+- Import the provided SQL schema
+- Update database credentials in the backend configuration file
+
+## 4. Initialise MySQL tables
+npm run init_tables
+
+## 5. Start the Backend Server
+npm start 
+
+## 6. Run the Frontend
+- Open frontend, http://localhost:3000/login.html
+- Ensure the backend server is running before accessing authenticated features
+```
+## 👤 Author
+
+Name: Vivian Tan
+
+Module: ST0503 Backend Web Development
+
+Assignment: CA2 Individual Project
