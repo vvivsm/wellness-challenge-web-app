@@ -1,8 +1,10 @@
 # SOULSIP - Wellness Challenge Web App
 
-A full-stack wellness challenge platform that encourages users to build healthy habits through challenges, progress tracking, points, reviews, and gamified rewards.
+SOULSIP is a full-stack wellness challenge web application designed to help users build healthier habits one small step at a time. The name combines “soul” and “sip”, representing the idea of taking small, consistent moments of care for personal well-being.
 
-The application allows users to register, log in securely, participate in wellness challenges, track their progress, earn points, and interact with features such as badges, quests, and reviews. It is designed to demonstrate secure authentication, frontend-to-backend integration, database-driven functionality, and interactive user experiences.
+Through wellness challenges, progress tracking, points, reviews, and gamified rewards, SOULSIP makes self-improvement feel more approachable and engaging. Users can register, log in securely, complete challenges, earn points, and interact with features such as badges, quests, and reviews.
+
+The project demonstrates secure authentication, frontend-to-backend integration, database-driven functionality, and interactive web development.
 
 ## Table of Contents
 
