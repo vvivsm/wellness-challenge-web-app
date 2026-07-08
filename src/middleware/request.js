@@ -1,7 +1,3 @@
-// Name: Vivian Tan Xiu Li
-// StudentID: 2518268
-// Class: DAAA/FT/1B/06
-
 module.exports.validateBody = (...fields) => (req, res, next) => {
     // Check request body
     if (!req.body || typeof req.body !== 'object') {

@@ -1,7 +1,3 @@
-// Name: Vivian Tan Xiu Li
-// StudentID: 2518268
-// Class: DAAA/FT/1B/06
-
 const model = require('../models/ingredientModel');
 
 module.exports.readAllIngredients = (req, res, next) => {

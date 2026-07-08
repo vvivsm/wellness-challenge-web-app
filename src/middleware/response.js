@@ -1,7 +1,3 @@
-// Name: Vivian Tan Xiu Li
-// StudentID: 2518268
-// Class: DAAA/FT/1B/06
-
 // Middleware to attach a message and HTTP status code
 // Store message in res.locals so it can be accessed later
 // Store HTTP status code in res.locals
