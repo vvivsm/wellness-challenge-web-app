@@ -1,13 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     const callback = (responseStatus, responseData) => {
-        console.log("responseStatus:", responseStatus);
-        console.log("responseData:", responseData);
         if (responseStatus == 200) {
-            // Check if login was successful
             if (responseData.token) {
-                // Store the token in local storage
                 localStorage.setItem("token", responseData.token);
-                // Redirect or perform further actions for logged-in user
                 window.location.href = "index.html";
             }
         } else {
@@ -22,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const warningText = document.getElementById("warningText");
 
     loginForm.addEventListener("submit", function (event) {
-        console.log("loginForm.addEventListener");
         event.preventDefault();
 
         const username = document.getElementById("loginUsername").value;

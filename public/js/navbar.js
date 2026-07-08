@@ -1,4 +1,3 @@
-// js/navbar.js
 (function () {
 
     var NAV_ITEMS = [
@@ -50,7 +49,7 @@
     function renderFooter() {
         return (
             '<footer class="footer">' +
-            '<p>© 2026 SOULSIP Vivian Tan. All rights reserved.</p>' +
+            '<p>Â© 2026 SOULSIP Vivian Tan. All rights reserved.</p>' +
             '</footer>'
         );
     }
@@ -72,25 +71,20 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        // Mount navbar
         var navRoot = document.getElementById("navbar-root");
         if (navRoot) navRoot.innerHTML = renderNavbar();
 
-        // Mount footer
         var footerRoot = document.getElementById("footerMount");
         if (footerRoot) footerRoot.innerHTML = renderFooter();
 
-        // Wire hamburger
         var toggleBtn = document.getElementById("navToggle");
         if (toggleBtn) toggleBtn.addEventListener("click", toggleMenu);
 
-        // Close menu on link click
         var navLinks = document.querySelectorAll(".nav-link");
         for (var i = 0; i < navLinks.length; i++) {
             navLinks[i].addEventListener("click", closeMenu);
         }
 
-        // Logout
         var logoutLink = document.getElementById("logoutLink");
         if (logoutLink) {
             logoutLink.addEventListener("click", function (e) {

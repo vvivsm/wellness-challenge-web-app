@@ -3,10 +3,8 @@ const pool = require("../services/db");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-// Import env
 require('dotenv').config();
 
-//Import parameters from .env
 const pepper = process.env.BCRYPT_PEPPER
 
 const callback = (error, results, fields) => {
@@ -22,8 +20,6 @@ bcrypt.hash('1234' + pepper, saltRounds, (error, hash) => {
   if (error) {
     console.error("Error hashing password:", error);
   } else {
-    console.log("Hashed password:", hash);
-
     const INIT_DB_SQL = `
     DROP TABLE IF EXISTS UserCraftedRecipes;
     DROP TABLE IF EXISTS RecipeRequirements;
@@ -106,7 +102,7 @@ bcrypt.hash('1234' + pepper, saltRounds, (error, hash) => {
     (1, 'Sleep 7+ hours tonight', 10, 'sleep'),
     (1, 'No caffeine after 3pm', 10, 'sleep'),
     (1, 'No screens 30 minutes before bed', 15, 'sleep'),
-    (1, 'Sleep and wake up at consistent time (±30 mins)', 20, 'sleep'),
+    (1, 'Sleep and wake up at consistent time (Â±30 mins)', 20, 'sleep'),
 
     -- PHYSICAL 
     (1, 'Take 8,000 steps today', 20, 'physical'),
@@ -118,7 +114,7 @@ bcrypt.hash('1234' + pepper, saltRounds, (error, hash) => {
     (1, 'Write down 3 things you are grateful for', 10, 'mental'),
     (1, 'Do 5 minutes of deep breathing / meditation', 15, 'mental'),
     (1, 'Journal for 5 minutes about your day', 15, 'mental'),
-    (1, 'Do a 10-minute “focus session” with no phone', 20, 'mental'),
+    (1, 'Do a 10-minute â€œfocus sessionâ€ with no phone', 20, 'mental'),
 
     -- SOCIAL 
     (1, 'Send a kind message to a friend', 10, 'social'),
@@ -183,14 +179,13 @@ bcrypt.hash('1234' + pepper, saltRounds, (error, hash) => {
 
     `;
 
-    // Initialise database
     pool.query(INIT_DB_SQL, (error, results) => {
       if (error) {
         console.error("Error initialising database:", error);
         process.exit(1);
       }
 
-      console.log("Database initialised successfully:", results);
+      console.log("Database initialised successfully");
       process.exit(0);
     });
 

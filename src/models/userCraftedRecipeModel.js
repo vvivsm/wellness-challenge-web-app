@@ -9,7 +9,6 @@ module.exports.insertCrafted = (data, callback) => {
     pool.query(SQLSTATEMENT, VALUES, callback);
 };
 
-// Check if a user has already crafted a recipe
 module.exports.selectUserCrafted = (data, callback) => {
     const SQL = `
     SELECT id, user_id, recipe_id, crafted_at
@@ -23,7 +22,6 @@ module.exports.selectUserCrafted = (data, callback) => {
     pool.query(SQL, VALUES, callback);
 };
 
-// Get all crafted recipes for a user (for UI: show CRAFTED ✓)
 module.exports.selectCraftedByUser = (data, callback) => {
     const SQL = `
         SELECT 
@@ -43,4 +41,3 @@ module.exports.selectCraftedByUser = (data, callback) => {
 
     pool.query(SQL, VALUES, callback);
 };
-

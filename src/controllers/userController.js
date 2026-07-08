@@ -1,6 +1,5 @@
 const model = require('../models/userModel');
 
-//Q1 
 module.exports.createUser = (req, res, next) => {
     const data = {
         username: req.body.username
@@ -19,7 +18,6 @@ module.exports.createUser = (req, res, next) => {
     model.insertNew(data, callback);
 };
 
-//Q1, Q3, Q4, Q9
 module.exports.readUserById = (req, res, next) => {
     const data = {
         id: res.locals.userId
@@ -42,7 +40,6 @@ module.exports.readUserById = (req, res, next) => {
     model.selectById(data, callback);
 };
 
-//Q1, Q4
 module.exports.requireUniqueUsername = (req, res, next) => {
     const newUsername = req.body.username;
 
@@ -71,14 +68,12 @@ module.exports.requireUniqueUsername = (req, res, next) => {
     model.selectByUsernameExcludingUser(data, callback);
 };
 
-//Q2
 module.exports.readAllUser = (req, res, next) => {
     const callback = (error, results, fields) => {
         if (error) {
             console.error(error);
             return res.status(500).json({ message: "Internal Server Error" });
         }
-
 
         if (results.length === 0) {
             return res.status(404).json({ message: "Users not found." });
@@ -91,7 +86,6 @@ module.exports.readAllUser = (req, res, next) => {
     model.selectAll(callback);
 };
 
-//Q4
 module.exports.updateUserById = (req, res, next) => {
     const data = {
         id: res.locals.userId,
@@ -115,7 +109,6 @@ module.exports.updateUserById = (req, res, next) => {
     model.updateById(data, callback);
 };
 
-//Q9
 module.exports.rewardCompletionById = (req, res, next) => {
     const userIdFromToken = res.locals.userId;
 

@@ -1,6 +1,5 @@
 const model = require('../models/challengeModel');
 
-//Q5
 module.exports.createChallenge = (req, res, next) => {
 
     const MAX_CHALLENGE_POINTS = 20;
@@ -39,7 +38,6 @@ module.exports.createChallenge = (req, res, next) => {
     model.insertChallenge(data, callback);
 };
 
-//Q5, Q8, Q9, Q10
 module.exports.readChallengeById = (req, res, next) => {
     const data = {
         id: req.params.id || res.locals.challengeId
@@ -62,14 +60,12 @@ module.exports.readChallengeById = (req, res, next) => {
     model.selectById(data, callback);
 };
 
-//Q6
 module.exports.readAllChallenge = (req, res, next) => {
     const callback = (error, results, fields) => {
         if (error) {
             console.error(error);
             return res.status(500).json({ message: "Internal Server Error" });
         }
-
 
         if (results.length === 0) {
             return res.status(404).json({ message: "Challenges not found." });

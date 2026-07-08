@@ -29,7 +29,6 @@ module.exports.readRecipeRequirementsById = (req, res, next) => {
             return res.status(500).json({ message: "Internal server error" });
         }
 
-        // Optional: if you want 404 when recipe has no requirements
         if (results.length === 0) {
             return res.status(404).json({ message: "Recipe requirements not found" });
         }

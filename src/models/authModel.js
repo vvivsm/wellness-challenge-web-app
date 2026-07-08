@@ -1,9 +1,5 @@
-//////////////////////////////////////////////////////
-// REQUIRE MODULES
-//////////////////////////////////////////////////////
 const pool = require('../services/db');
 
-// Check Username or Email Exist
 module.exports.checkUsernameOrEmailExist = (data, callback) => {
 
     const SQLSTATEMENT = `
@@ -16,9 +12,6 @@ module.exports.checkUsernameOrEmailExist = (data, callback) => {
     pool.query(SQLSTATEMENT, VALUES, callback);
 };
 
-//////////////////////////////////////////////////////
-// SELECT USER BY USERNAME
-//////////////////////////////////////////////////////
 module.exports.selectUserByUsername = (data, callback) => {
     const SQLSTATEMENT = `
         SELECT * FROM Users
@@ -29,9 +22,6 @@ module.exports.selectUserByUsername = (data, callback) => {
     pool.query(SQLSTATEMENT, VALUES, callback);
 };
 
-//////////////////////////////////////////////////////
-// SELECT USER BY USERNAME OR EMAIL
-//////////////////////////////////////////////////////
 module.exports.selectUserByUsernameOrEmail = (data, callback) => {
     const SQLSTATEMENT = `
         SELECT * FROM Users
@@ -42,9 +32,6 @@ module.exports.selectUserByUsernameOrEmail = (data, callback) => {
     pool.query(SQLSTATEMENT, VALUES, callback);
 };
 
-//////////////////////////////////////////////////////
-// INSERT USER
-//////////////////////////////////////////////////////
 module.exports.insertUser = (data, callback) => {
     const SQLSTATEMENT = `
         INSERT INTO Users (username, email, password)

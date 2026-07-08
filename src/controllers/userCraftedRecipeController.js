@@ -1,7 +1,5 @@
-// controllers/userCraftedRecipeController.js
 const userCraftedRecipeModel = require("../models/userCraftedRecipeModel");
 
-// Middleware: prevent crafting same recipe more than once
 module.exports.checkNotCraftedBefore = (req, res, next) => {
     const tokenUserId = res.locals.userId;
     const paramUserId = res.locals.userId;
@@ -11,7 +9,6 @@ module.exports.checkNotCraftedBefore = (req, res, next) => {
         return res.status(400).json({ message: "Missing required data" });
     }
 
-    // Security: user must match token
     if (parseInt(paramUserId) !== parseInt(tokenUserId)) {
         return res.status(401).json({ message: "User mismatch" });
     }
@@ -27,7 +24,6 @@ module.exports.checkNotCraftedBefore = (req, res, next) => {
             return res.status(500).json({ message: "Internal server error" });
         }
 
-        // If already crafted, block
         if (results && results.length > 0) {
             return res.status(409).json({ message: "Recipe already crafted" });
         }
@@ -38,7 +34,6 @@ module.exports.checkNotCraftedBefore = (req, res, next) => {
     userCraftedRecipeModel.selectUserCrafted(data, callback);
 };
 
-// GET list of crafted recipes for UI
 module.exports.readCraftedByUser = (req, res, next) => {
     const tokenUserId = res.locals.userId;
 
@@ -60,4 +55,3 @@ module.exports.readCraftedByUser = (req, res, next) => {
 
     userCraftedRecipeModel.selectCraftedByUser(data, callback);
 };
-

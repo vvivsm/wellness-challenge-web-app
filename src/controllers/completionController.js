@@ -1,6 +1,5 @@
 const model = require('../models/completionModel');
 
-//Q9
 module.exports.createCompletion = (req, res, next) => {
 
     const userIdFromToken = res.locals.userId;
@@ -34,8 +33,6 @@ module.exports.createCompletion = (req, res, next) => {
     model.insertCompletion(data, callback);
 };
 
-
-//Q9
 module.exports.readCompletionById = (req, res, next) => {
     const data = { id: res.locals.completionId };
 

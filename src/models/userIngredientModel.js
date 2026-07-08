@@ -65,7 +65,6 @@ module.exports.sellOneIngredient = (data, callback) => {
                 return callback(txErr);
             }
 
-            // 1) Get ingredient cost
             const SQL_COST = `SELECT cost FROM Ingredients WHERE id = ?`;
             conn.query(SQL_COST, [ingredientId], (err1, rows1) => {
                 if (err1) return rollback(conn, err1, callback);
@@ -77,7 +76,6 @@ module.exports.sellOneIngredient = (data, callback) => {
                 const cost = parseInt(rows1[0].cost, 10) || 0;
                 const refund = Math.floor(cost / 2);
 
-                // 2) Check user owns it + get current qty
                 const SQL_QTY = `
                     SELECT quantity
                     FROM UserIngredients
@@ -98,7 +96,6 @@ module.exports.sellOneIngredient = (data, callback) => {
 
                     const newQty = currentQty - 1;
 
-                    // 3) Update qty (if becomes 0, we can delete row)
                     if (newQty === 0) {
                         const SQL_DEL = `
                             DELETE FROM UserIngredients
@@ -125,7 +122,6 @@ module.exports.sellOneIngredient = (data, callback) => {
     });
 };
 
-// helpers (still inside same file)
 function updatePoints(conn, userId, refund, newQty, callback) {
     const SQL_POINTS = `UPDATE Users SET points = points + ? WHERE id = ?`;
     conn.query(SQL_POINTS, [refund, userId], (err) => {

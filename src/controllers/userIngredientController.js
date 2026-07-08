@@ -31,7 +31,6 @@ module.exports.buyIngredient = (req, res, next) => {
     userModel.deductPoints(data, callback);
 };
 
-
 module.exports.addIngredientToInventory = (req, res, next) => {
     const data = {
         user_id: res.locals.userId,
@@ -44,12 +43,10 @@ module.exports.addIngredientToInventory = (req, res, next) => {
             return res.status(500).json({ message: "Internal server error" });
         }
 
-        // if updated existing row, done
         if (results.affectedRows > 0) {
             return next();
         }
 
-        // else insert new row
         const callbackInsert = (error2, results2) => {
             if (error2) {
                 console.error(error2);
@@ -66,8 +63,6 @@ module.exports.addIngredientToInventory = (req, res, next) => {
 
 module.exports.readInventoryByUser = (req, res, next) => {
     const data = { user_id: res.locals.userId };
-
-    console.log(data);
 
     const callback = (error, results) => {
         if (error) {

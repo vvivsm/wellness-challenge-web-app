@@ -7,7 +7,6 @@ const jwtMiddleware = require("../middleware/jwtMiddleware")
 const { validateBody } = require('../middleware/request');
 const { attachMessage, sendResponse } = require('../middleware/response');
 
-//Q5
 router.post('/',
     validateBody('description', 'points', 'type'),
     jwtMiddleware.verifyToken,
@@ -17,13 +16,11 @@ router.post('/',
     sendResponse()
 );
 
-//Q6
 router.get('/',
     challengeController.readAllChallenge,
     sendResponse()
 );
 
-//Q9
 router.post('/:id',
     jwtMiddleware.verifyToken,
     challengeController.readChallengeById,

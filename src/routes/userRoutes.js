@@ -9,8 +9,6 @@ const jwtMiddleware = require("../middleware/jwtMiddleware")
 const { validateBody } = require('../middleware/request');
 const { attachMessage, sendResponse } = require('../middleware/response');
 
-//Deducts points, adds ingredient to inventory
-//Buy ingredient
 router.post('/ingredients/:ingredient_id/buy',
     jwtMiddleware.verifyToken,
     ingredientController.readIngredientById,
@@ -21,7 +19,6 @@ router.post('/ingredients/:ingredient_id/buy',
     sendResponse()
 );
 
-//Get inventory of a user
 router.get('/inventory',
     jwtMiddleware.verifyToken,
     userIngredientController.readInventoryByUser,
@@ -29,7 +26,6 @@ router.get('/inventory',
     sendResponse()
 );
 
-//Sell an ingredient 
 router.delete('/inventory/:ingredient_id',
     jwtMiddleware.verifyToken,
     userIngredientController.sellOneIngredient,
@@ -37,7 +33,6 @@ router.delete('/inventory/:ingredient_id',
     sendResponse()
 );
 
-//Craft a recipe
 router.post('/recipes/:recipe_id/craft',
     jwtMiddleware.verifyToken,
     craftController.requireRecipeExists,
@@ -50,7 +45,6 @@ router.post('/recipes/:recipe_id/craft',
     sendResponse()
 );
 
-//Get all crafted soups
 router.get('/crafted',
     jwtMiddleware.verifyToken,
     userCraftedRecipeController.readCraftedByUser,
@@ -58,14 +52,12 @@ router.get('/crafted',
     sendResponse()
 );
 
-//Q3
 router.get('/',
     jwtMiddleware.verifyToken,
     userController.readUserById,
     sendResponse()
 )
 
-//Q4
 router.put('/',
     jwtMiddleware.verifyToken,
     userController.requireUniqueUsername,

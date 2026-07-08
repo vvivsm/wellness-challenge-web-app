@@ -1,16 +1,7 @@
-//////////////////////////////////////////////////////
-// REQUIRE MODULES
-//////////////////////////////////////////////////////
 const express = require('express');
 
-//////////////////////////////////////////////////////
-// CREATE ROUTER
-//////////////////////////////////////////////////////
 const router = express.Router();
 
-//////////////////////////////////////////////////////
-// DEFINE ROUTES
-//////////////////////////////////////////////////////
 const exampleController = require('../controllers/exampleController');
 const authController = require('../controllers/authController');
 const bcryptMiddleware = require('../middleware/bcryptMiddleware');
@@ -23,7 +14,4 @@ router.post("/jwt/generate", exampleController.preTokenGenerate, jwtMiddleware.g
 router.get("/jwt/verify", jwtMiddleware.verifyToken, exampleController.showTokenVerified);
 router.post("/bcrypt/compare", exampleController.preCompare, bcryptMiddleware.comparePassword, exampleController.showCompareSuccess);
 router.post("/bcrypt/hash", bcryptMiddleware.hashPassword, exampleController.showHashing);
-//////////////////////////////////////////////////////
-// EXPORT ROUTER
-//////////////////////////////////////////////////////
 module.exports = router;
